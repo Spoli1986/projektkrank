@@ -1,21 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaBars, FaX } from 'react-icons/fa6';
-import { usePathname } from 'next/navigation';
 
 function NavItems() {
   const [navbar, setNavbar] = useState<boolean>(false);
-  const [isShopRoute, setIsShopRoute] = useState<boolean>(false);
   const handleOnClickMenu = () => {
     setNavbar(!navbar);
   };
-
-  const pathname = usePathname();
-  useEffect(() => {
-    pathname === '/shop' ? setIsShopRoute(true) : setIsShopRoute(false);
-  }, [pathname]);
 
   return (
     <div>
@@ -51,15 +44,6 @@ function NavItems() {
               <span className="shadow-md hover:text-red-400">Contact</span>
             </Link>
           </li>
-          {isShopRoute ? (
-            <li className="mx-4">
-              <Link href="/shop/auth/login" title="Login">
-                <span className="shadow-md hover:text-red-400">Login</span>
-              </Link>
-            </li>
-          ) : (
-            <></>
-          )}
         </ul>
         <Link href="/shoppingcart" title="Shopping Cart"></Link>
         <div className="flex md:hidden text-white text-3xl pr-5" onClick={handleOnClickMenu}>
@@ -104,13 +88,6 @@ function NavItems() {
                 <span className="shadow-md hover:text-red-400">Contact</span>
               </Link>
             </li>
-            {isShopRoute && (
-              <li className="mx-4" onClick={handleOnClickMenu}>
-                <Link href="/shop/auth/login" title="Login">
-                  <span className="shadow-md hover:text-red-400">Login</span>
-                </Link>
-              </li>
-            )}
           </ul>
         </div>
       </nav>

@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { getCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
 import CartEntry from './CartEntry';
@@ -21,7 +22,9 @@ async function Cart() {
         <div className="flex flex-col items-end sm:items-center ">
           <p className="mb-3 font-bold">Total: {formatPrice(cart?.subtotal) || 0}</p>
 
-          <button className="btn btn-primary sm:w-[200px]">Checkout</button>
+          <button className="btn btn-primary sm:w-[200px]" onClick={redirect('/shop/checkout')}>
+            Checkout
+          </button>
         </div>
       )}
     </div>
