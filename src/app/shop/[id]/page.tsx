@@ -37,7 +37,25 @@ async function ProductPage({ params: { id } }: ProductPageProps) {
         <h1 className="text-5xl font-bold">{product.name}</h1>
         <PriceTag price={product.price} />
         <p className="py-6">{product.description}</p>
-        <AddToCartButton productId={product.id} incrementProductQuantity={incrementProductQuantity} />
+        {!!product.size && (
+          <div className="flex gap-1">
+            Grösse:
+            <select
+              className="bg-transparent cursor-pointer"
+              //  onChange={(e) => {
+              //    handleSelect(e);
+              //  }}
+              defaultValue={'s'}
+            >
+              {(product.size as string[]).map((size) => (
+                <option value={size} key={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        <AddToCartButton productId={product.id} incrementProductQuantity={incrementProductQuantity} size="m" />
       </div>
     </div>
   );

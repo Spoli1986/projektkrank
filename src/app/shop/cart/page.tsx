@@ -1,8 +1,10 @@
-import { redirect } from 'next/navigation';
+import Checkout from '@/app/components/shop/Checkout';
 import { getCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
 import CartEntry from './CartEntry';
 import { setProductQuantity } from './actions';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export const metadata = {
   title: 'Your Cart - Projekt Krank',
@@ -10,6 +12,7 @@ export const metadata = {
 
 async function Cart() {
   const cart = await getCart();
+  const session = await getServerSession(authOptions);
   return (
     <div className="mt-24 text-info flex flex-col justify-center sm:items-center mx-4 lg:mx-0">
       <h1 className="mb-6 text-3xl self-center font-bold text-pk-green">Your Cart</h1>
@@ -21,8 +24,7 @@ async function Cart() {
       ) : (
         <div className="flex flex-col items-end sm:items-center ">
           <p className="mb-3 font-bold">Total: {formatPrice(cart?.subtotal) || 0}</p>
-
-          <button className="btn btn-primary sm:w-[200px]">Checkout</button>
+          <Checkout session={session} />
         </div>
       )}
     </div>
