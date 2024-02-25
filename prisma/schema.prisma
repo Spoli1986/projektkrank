@@ -12,11 +12,11 @@ model Product {
   description String
   imageUrl    String
   name        String
-  size        Json?
   price       Int
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   CartItem    CartItem[]
+  size        String?
 
   @@map("products")
 }

@@ -31,6 +31,7 @@ function CartEntry({ cartItem: { product, quantity } }: CartEntryProps) {
         <Link href={'/shop/' + product.id} className="font-bold">
           {product.name}
         </Link>
+        {!!product.size && <div>Size: {product.size}</div>}
         <div>Price: {formatPrice(product.price)}</div>
         <div className="my-1 flex items-center gap-2">
           Quantity:

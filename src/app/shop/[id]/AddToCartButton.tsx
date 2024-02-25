@@ -4,7 +4,6 @@ import { useState, useTransition } from 'react';
 import { incrementProductQuantity } from './actions';
 
 interface AddToCartButtonProps {
-  size: string;
   productId: string;
   incrementProductQuantity: (productId: string) => Promise<void>;
 }

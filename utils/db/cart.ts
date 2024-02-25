@@ -42,6 +42,7 @@ export async function getCart(): Promise<ShoppingCart | null> {
     subtotal: cart.items.reduce((acc, item) => acc + item.quantity * item.product.price, 0),
   };
 }
+
 export async function createCart(): Promise<ShoppingCart> {
   const session = await getServerSession(authOptions);
   let newCart: Cart;

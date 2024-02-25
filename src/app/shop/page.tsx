@@ -57,9 +57,10 @@ async function Shop({ searchParams: { page = '1' } }: ShopProps) {
           </div>
         )}
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {(currentPage === 1 ? products.slice(1) : products).map((product) => (
-            <ProductCard product={product} key={product.id} />
-          ))}
+          {(currentPage === 1 ? products.slice(1) : products).map(
+            (product) =>
+              (!!!product.size || product.size === 'm') && <ProductCard product={product} key={product.id} />,
+          )}
         </div>
         {totalPages > 1 && <PaginationBar currentPage={currentPage} totalPages={totalPages} />}
       </main>
