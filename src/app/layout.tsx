@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-black flex flex-col justify-between min-h-screen">
+      <body className="flex flex-col bg-aufbruch bg-cover justify-between min-h-screen">
         <SessionProvider>
           <Navbar />
           {/* <Image

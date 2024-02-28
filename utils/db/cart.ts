@@ -66,6 +66,11 @@ export async function createCart(): Promise<ShoppingCart> {
   };
 }
 
+export async function deleteAnonymousCart(cartId: string) {
+  await prisma.cart.delete({ where: { id: cartId } });
+  cookies().set('localCartId', '');
+}
+
 export async function mergeAnonymousCatIntoUserCart(userId: string) {
   const localCartId = cookies().get('localCartId')?.value;
   const localCart = localCartId

@@ -4,6 +4,7 @@ import { getCart } from '../../../../../utils/db/cart';
 
 async function Checkout() {
   const cart = await getCart();
+
   return (
     <div className="text-center mt-52">
       <h3 className="text-2xl font-bold text-white">Checkout</h3>
