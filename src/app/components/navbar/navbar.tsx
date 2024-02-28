@@ -16,7 +16,7 @@ export default async function Navbar() {
         <Image src={Logo} alt="logo" fill sizes="full" style={{ position: 'absolute' }} />
       </div>
       <div className="flex md:flex-row-reverse flex-row items-center">
-        <UserMenuButton session={session} />
+        {/* <UserMenuButton session={session} /> */}
         <ShoppingCartButton cart={cart} />
         <NavItems />
       </div>

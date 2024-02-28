@@ -5,7 +5,7 @@ import { CartItemWithProduct } from '../../../../utils/db/cart';
 import Link from 'next/link';
 import { formatPrice } from '../../../../utils/utils';
 import { useTransition } from 'react';
-import { setProductQuantity } from './actions';
+import { setProductQuantity } from '../../shop/cart/actions';
 
 interface CartEntryProps {
   cartItem: CartItemWithProduct;

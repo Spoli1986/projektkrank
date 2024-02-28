@@ -1,7 +1,7 @@
 import Checkout from '@/app/components/shop/Checkout';
 import { getCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
-import CartEntry from './CartEntry';
+import CartEntry from '../../components/shop/CartEntry';
 import { setProductQuantity } from './actions';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';

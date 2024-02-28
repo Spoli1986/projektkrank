@@ -1,19 +1,27 @@
-"use client";
-import Link from "next/link";
-import React from "react";
-import YouTube, { YouTubeProps } from "react-youtube";
+'use client';
+import React from 'react';
 
 type Props = {};
 
 function Media({}: Props) {
   return (
-    <div className="mt-32 text-pk-green text-3xl font-semibold items-center flex justify-center gap-4">
-      <Link href="/media/videos" title="Videos">
-        <span className="shadow-md hover:text-red-400">Videos</span>
-      </Link>
-      <Link href="/media/photos" title="Fotos">
-        <span className="shadow-md hover:text-red-400">Fotos</span>
-      </Link>
+    <div className="mt-32 text-white flex flex-col md:items-center p-2 md:p-0">
+      <div className="aspect-video md:w-[853px]">
+        <iframe
+          className="h-full w-full"
+          src="https://www.youtube.com/embed/5JPghLhYohw"
+          title="Projekt Krank - Sorg"
+          width="100%"
+        ></iframe>
+      </div>
+      <div className="aspect-video md:w-[853px]">
+        <iframe
+          className="h-full w-full"
+          src="https://www.youtube.com/embed/5JPghLhYohw"
+          title="Projekt Krank - Sorg"
+          width="100%"
+        ></iframe>
+      </div>
     </div>
   );
 }
