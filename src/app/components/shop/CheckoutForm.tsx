@@ -13,10 +13,11 @@ interface CheckoutFormProps {
 
 export type FormData = {
   total: string;
-  ccartId: string;
+  cartId: string;
   name: string;
   email: string;
   address: string;
+  city: string;
   zip: string;
   country: string;
   phone: string;
@@ -24,12 +25,13 @@ export type FormData = {
 
 export default function CheckoutForm({ cart }: CheckoutFormProps) {
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     cartId: cart?.id!,
     total: formatPrice(cart?.subtotal!),
     name: '',
     email: '',
     address: '',
+    city: '',
     zip: '',
     country: '',
     phone: '',
@@ -37,6 +39,18 @@ export default function CheckoutForm({ cart }: CheckoutFormProps) {
 
   const [formSuccess, setFormSuccess] = useState(false);
   const [formSuccessMessage, setFormSuccessMessage] = useState('');
+
+  function generateRandomHexString(length: number): string {
+    const characters = '0123456789ABCDEF';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+    }
+    return result;
+  }
+
+  const orderId: string = generateRandomHexString(16);
 
   const handleInput = (e: any) => {
     const fieldName = e.target.name;
@@ -54,24 +68,18 @@ export default function CheckoutForm({ cart }: CheckoutFormProps) {
 
     const formURL = e.target.action;
 
-    const data = new FormData();
-
-    // // Turn our formData state into data we can use with a form submission
-    // Object.entries(formData).forEach(([key, value]) => {
-    //   console.log('foreach');
-    //   data.append(key, value);
-    // });
-
-    console.log(formData);
     // POST the data to the URL of the form
     fetch(formURL, {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: JSON.stringify({ ...formData, orderId }),
       headers: {
         accept: 'application/json',
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        // response.json();
+      })
       .then((data) => {
         setFormSuccess(true);
         setFormSuccessMessage('success');
@@ -108,9 +116,9 @@ export default function CheckoutForm({ cart }: CheckoutFormProps) {
             </div>
             <div>
               <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
+                type="text"
+                name="address"
+                placeholder="Address"
                 className="w-full input input-bordered"
                 onChange={(e) => handleInput(e)}
                 required
@@ -119,8 +127,8 @@ export default function CheckoutForm({ cart }: CheckoutFormProps) {
             <div>
               <input
                 type="text"
-                name="address"
-                placeholder="Address"
+                name="city"
+                placeholder="City"
                 className="w-full input input-bordered"
                 onChange={(e) => handleInput(e)}
                 required
@@ -141,6 +149,16 @@ export default function CheckoutForm({ cart }: CheckoutFormProps) {
                 type="text"
                 name="country"
                 placeholder="Country"
+                className="w-full input input-bordered"
+                onChange={(e) => handleInput(e)}
+                required
+              />
+            </div>
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
                 className="w-full input input-bordered"
                 onChange={(e) => handleInput(e)}
                 required
