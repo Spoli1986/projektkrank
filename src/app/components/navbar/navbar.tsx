@@ -17,7 +17,7 @@ export default async function Navbar() {
       </div>
       <div className="flex md:flex-row-reverse flex-row items-center">
         {/* <UserMenuButton session={session} /> */}
-        <ShoppingCartButton cart={cart} />
+        {/* <ShoppingCartButton cart={cart} /> */}
         <NavItems />
       </div>
     </header>

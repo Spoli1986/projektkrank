@@ -34,8 +34,7 @@ async function Shop({ searchParams: { page = '1' } }: ShopProps) {
       </Head>
 
       <main className="flex flex-col items-center gap-4">
-        <h1 className="mb-10">PK Webshop</h1>
-        {currentPage === 1 && (
+        {/* {currentPage === 1 && (
           <div className="hero rounded-xl bg-gray-900">
             <div className="hero-content flex-col lg:flex-row">
               <Image
@@ -62,7 +61,8 @@ async function Shop({ searchParams: { page = '1' } }: ShopProps) {
               (!!!product.size || product.size === 'm') && <ProductCard product={product} key={product.id} />,
           )}
         </div>
-        {totalPages > 1 && <PaginationBar currentPage={currentPage} totalPages={totalPages} />}
+        {totalPages > 1 && <PaginationBar currentPage={currentPage} totalPages={totalPages} />} */}
+        <p>Coming soon...</p>
       </main>
     </div>
   );

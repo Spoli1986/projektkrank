@@ -28,7 +28,7 @@ function Upcoming({}: Props) {
         </div>
         <iframe
           style={{ borderRadius: 12 }}
-          src="https://open.spotify.com/embed/track/3KKyiiuwTMiaVu66E0WmMK?utm_source=generator"
+          src="https://open.spotify.com/embed/track/3KKyiiuwTMiaVu66E0WmMK?utm_source=generator&theme=0"
           width="80%"
           height="352"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
