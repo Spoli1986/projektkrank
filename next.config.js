@@ -13,6 +13,7 @@ const nextConfig = {
       { hostname: 'media.boohoo.com' },
       { hostname: 'shop.2pac.com' },
       { hostname: 'i.etsystatic.com' },
+      { hostname: 'i.postimg.cc' },
     ],
   },
   experimental: {
