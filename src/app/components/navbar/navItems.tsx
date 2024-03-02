@@ -53,11 +53,11 @@ function NavItems() {
         <div
           className={
             navbar
-              ? 'md:hidden absolute top-20 right-0 bottom-0 left-0 flex justify-center items-top ease-in duration-300 w-full h-screen bg-slate-900 z-10'
-              : 'md:hidden absolute top-20 right-0 bottom-0 left-[-100%] flex justify-center items-top ease-in duration-300 w-full h-screen bg-slate-900 z-10'
+              ? 'md:hidden absolute top-20 right-0 bottom-0 left-0 flex justify-center items-start pt-20 ease-in duration-300 w-full h-screen bg-transparent/90 z-10'
+              : 'md:hidden absolute top-20 right-0 bottom-0 left-[-100%] flex justify-center items-start pt-20 ease-in duration-300 w-full h-screen bg-transparent/90 z-10'
           }
         >
-          <ul className="flex flex-col text-3xl uppercase p-4 items-center gap-6 pt-20">
+          <ul className="flex flex-col text-3xl uppercase p-4 items-center gap-6">
             <li className="mx-4" onClick={handleOnClickMenu}>
               <Link href="/" title="Home">
                 <span className="shadow-md">Home</span>
