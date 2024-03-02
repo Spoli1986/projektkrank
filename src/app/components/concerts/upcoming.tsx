@@ -27,16 +27,17 @@ function Upcoming({}: Props) {
             !
           </p>
         </div>
-        <iframe
-          style={{ borderRadius: 12 }}
-          src="https://open.spotify.com/embed/track/3KKyiiuwTMiaVu66E0WmMK?utm_source=generator&theme=0"
-          width="80%"
-          height="352"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy"
-        ></iframe>
+        <div className="w-full md:w-[600px]">
+          <iframe
+            style={{ borderRadius: 12 }}
+            src="https://open.spotify.com/embed/track/3KKyiiuwTMiaVu66E0WmMK?utm_source=generator&theme=0"
+            width="100%"
+            height="352"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
       </div>
-      <Image src={'https://i.postimg.cc/k4VVDNpV/soho.jpg'} alt="soho" width={48} height={30} />
     </div>
   );
 }
