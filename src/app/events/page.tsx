@@ -69,11 +69,13 @@ function Events({}: Props) {
           place={event.place}
           presale={event.presale}
           city={event.city}
+          index={index}
         />
       ))}
       <h3 className="text-slate-400 uppercase italic mt-24 mb-8">Vergangene</h3>
       {events.map((event, index) => (
         <Previews
+          index={index}
           key={index}
           flyer={event.flyer}
           bands={event.bands}
