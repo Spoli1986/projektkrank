@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -35,6 +36,7 @@ function Upcoming({}: Props) {
           loading="lazy"
         ></iframe>
       </div>
+      <Image src={'https://i.postimg.cc/k4VVDNpV/soho.jpg'} alt="soho" width={48} height={30} />
     </div>
   );
 }

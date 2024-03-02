@@ -1,16 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { FaLocationDot } from 'react-icons/fa6';
+import { formatDate } from '../../../../utils/utils';
 
 type Props = {
-  flyer?: StaticImageData;
-  date: string;
+  flyer?: string | null;
+  date: Date;
   bands: string[];
   place: string;
-  presale?: string;
+  presale?: string | null;
   city: string;
   index: number;
 };
@@ -21,7 +21,7 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
       <div className="text-slate-300 flex flex-col sm:flex-row rounded-md p-2 gap-3 bg-transparent/20">
         <div className="flex flex-row sm:gap-3 items-center justify-between sm:w-1/2">
           <div className="p-1 bg-slate-700 sm:w-max rounded w-min">
-            <h2 className="text-lg sm:w-24">{date}</h2>
+            <h2 className="text-lg w-24">{formatDate(date)}</h2>
           </div>
           <div className="sm:w-48 w-1/2">
             <div className="text-xl text-secondary">{place}</div>
@@ -31,10 +31,10 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
           </div>
         </div>
         <div className="flex flex-row justify-between items-center sm:w-1/2">
-          <div className="flex flex-col text-info sm:w-1/3">
+          <div className="flex flex-col text-info">
             Bands:
             {bands.map((band, index) => (
-              <span key={band} className="italic text-white">
+              <span key={index} className="italic text-white">
                 {band}
               </span>
             ))}
@@ -57,7 +57,7 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
                     }
                   }}
                 >
-                  <Image src={flyer} alt="flyer" className="w-10" />
+                  <Image src={flyer} alt="flyer" width={40} height={10} />
                 </button>
                 <dialog id={`my_modal_${index}`} className="modal bg-pk-green/30">
                   <div className="flex flex-col h-full justify-center items-center">
@@ -65,7 +65,7 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
                       <form method="dialog">
                         {/* if there is a button in form, it will close the modal */}
                         <button className="">
-                          <Image src={flyer} alt="flyer" />
+                          <Image src={flyer} alt="flyer" width={800} height={200} />
                         </button>
                       </form>
                     </div>

@@ -99,3 +99,16 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verificationtokens")
 }
+
+model Event {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  flyer   String?
+  bands   String[]
+  date    DateTime
+  place   String
+  city    String
+  presale String?
+  past    Boolean
+
+  @@map("events")
+}
