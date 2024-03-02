@@ -18,31 +18,35 @@ async function Events({}: Props) {
   return (
     <div className="flex flex-col gap-3 w-screen justify-center items-center mt-28">
       <h1 className="text-pk-green text-4xl uppercase underline font-bold mb-12">Nächstes</h1>
-      {upcomingEvents.map((event, index) => (
-        <Previews
-          key={index}
-          flyer={event.flyer}
-          bands={event.bands}
-          date={event.date}
-          place={event.place}
-          presale={event.presale}
-          city={event.city}
-          index={index}
-        />
-      ))}
+      <div className="w-screen flex flex-col items-center">
+        {upcomingEvents.map((event, index) => (
+          <Previews
+            key={index}
+            flyer={event.flyer}
+            bands={event.bands}
+            date={event.date}
+            place={event.place}
+            presale={event.presale}
+            city={event.city}
+            index={index}
+          />
+        ))}
+      </div>
       <h3 className="text-slate-400 uppercase italic mt-24 mb-8">Vergangene</h3>
-      {postEvents.map((event, index) => (
-        <Previews
-          index={index}
-          key={index}
-          flyer={event.flyer}
-          bands={event.bands}
-          date={event.date}
-          place={event.place}
-          presale={event.presale}
-          city={event.city}
-        />
-      ))}
+      <div className="w-screen flex flex-col items-center opacity-60">
+        {postEvents.map((event, index) => (
+          <Previews
+            index={index}
+            key={index}
+            flyer={event.flyer}
+            bands={event.bands}
+            date={event.date}
+            place={event.place}
+            presale={event.presale}
+            city={event.city}
+          />
+        ))}
+      </div>
     </div>
   );
 }
