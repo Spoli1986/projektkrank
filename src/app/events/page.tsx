@@ -17,7 +17,7 @@ async function Events({}: Props) {
 
   return (
     <div className="flex flex-col gap-3 w-screen justify-center items-center mt-28">
-      <h1 className="text-pk-green text-4xl uppercase underline font-bold mb-12">Nächstes</h1>
+      <h1 className="text-pk-green text-4xl uppercase underline mb-12">Upcoming</h1>
       <div className="w-screen flex flex-col items-center">
         {upcomingEvents.map((event, index) => (
           <Previews
@@ -32,7 +32,7 @@ async function Events({}: Props) {
           />
         ))}
       </div>
-      <h3 className="text-slate-400 uppercase italic mt-24 mb-8">Vergangene</h3>
+      <h3 className="text-slate-400 uppercase italic mt-24 mb-8">Past</h3>
       <div className="w-screen flex flex-col items-center opacity-60">
         {postEvents.map((event, index) => (
           <Previews

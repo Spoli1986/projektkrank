@@ -11,7 +11,9 @@ export default async function Navbar() {
   const cart = await getCart();
   const session = await getServerSession(authOptions);
   return (
-    <header className="text-pk-green w-screen md:text-xl flex z-10 md:justify-center justify-between items-center fixed self-center font-semibold bg-black shadow-lg shadow-slate-600">
+    <header
+      className={`text-pk-green w-screen md:text-xl flex z-10 md:justify-center justify-between items-center fixed self-center font-semibold bg-black shadow-lg shadow-slate-600`}
+    >
       <div className="sm:w-40 sm:h-20 w-32 h-16 p-5 relative">
         <Image src={Logo} alt="logo" fill sizes="full" style={{ position: 'absolute' }} />
       </div>

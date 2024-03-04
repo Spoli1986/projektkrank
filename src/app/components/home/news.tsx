@@ -1,10 +1,13 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import Spotify from '../common/frames/spotify';
+import Youtube from '../common/frames/youtube';
+import NextEvent from '../concerts/nextEvent';
 
 type Props = {};
 
-function Upcoming({}: Props) {
+function News({}: Props) {
+  const alterMannSpotify = 'https://open.spotify.com/embed/track/3KKyiiuwTMiaVu66E0WmMK?utm_source=generator&theme=0';
+
   return (
     <div className="text-white pt-40 py-8 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col gap-10 items-center">
@@ -16,7 +19,7 @@ function Upcoming({}: Props) {
           <p className="mb-4 lg:text-2xl md:text-lg">Bereits jetzt kann man das Album vorbestellen.</p>
           <p className="mb-4 lg:text-xl">Das Album wird ab dem 03.05.2024 erhältlich sein.</p>
           <p className="mb-4 lg:text-lg md:text-base text-sm">
-            Zur Vorbestellunger des neue Album “Aufbruch” klicke{' '}
+            Zur Vorbestellung des neue Album “Aufbruch” klicke{' '}
             <Link
               className="text-primary hover:text-pk-green active:text-[rgb(11,222,110)] underline uppercase"
               href={'https://hypeddit.com/projektkrank/aufbruch'}
@@ -27,19 +30,20 @@ function Upcoming({}: Props) {
             !
           </p>
         </div>
-        <div className="w-full md:w-[600px]">
-          <iframe
-            style={{ borderRadius: 12 }}
-            src="https://open.spotify.com/embed/track/3KKyiiuwTMiaVu66E0WmMK?utm_source=generator&theme=0"
-            width="100%"
-            height="352"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-          ></iframe>
+        <Youtube
+          src="https://www.youtube.com/embed/kdPTc8gFr7Y?si=bjhf-j4Pc3NmSX3X"
+          title="Projekt Krank - Alter Mann"
+        />
+        <Spotify src={alterMannSpotify} width="100%" height="352" />
+        <div className="flex flex-col border-t w-[90%] mt-10 pt-10 items-center gap-14">
+          <h2 className="lg:text-4xl md:text-3xl text-xl font-bold text-pk-green">Unser nächstes Konzert</h2>
+
+          <NextEvent />
+          <p className="lg:text-3xl md:text-2xl text-lg font-bold mb-14 text-pk-green">bis bald...</p>
         </div>
       </div>
     </div>
   );
 }
 
-export default Upcoming;
+export default News;
