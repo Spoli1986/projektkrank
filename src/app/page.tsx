@@ -1,11 +1,9 @@
-"use client";
-
-import Upcoming from "./components/concerts/upcoming";
+import News from './components/home/news';
 
 export default function Home() {
-	return (
-		<main className="">
-			<Upcoming />
-		</main>
-	);
+  return (
+    <main className="">
+      <News />
+    </main>
+  );
 }

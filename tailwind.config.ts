@@ -18,12 +18,6 @@ const config: Config = {
         'grey-black': 'rgba(31, 41, 55)',
         'pk-green': '#51de0b',
       },
-      fontFamily: {
-        'space-grotesk': ['Space Grotesk', 'sans-serif'],
-        'dancing-script': ['Dancing Script', 'cursive'],
-        'f-grotesk': ['Familjen Grotesk', 'sans-serif'],
-        chakra: ["'Chakra Petch', sans-serif"],
-      },
     },
   },
   plugins: [require('daisyui')],
