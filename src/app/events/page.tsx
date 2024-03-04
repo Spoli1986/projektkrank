@@ -8,11 +8,13 @@ async function Events({}: Props) {
     where: {
       past: true,
     },
+    orderBy: [{ date: 'desc' }],
   });
   const upcomingEvents = await prisma.event.findMany({
     where: {
       past: false,
     },
+    orderBy: [{ date: 'asc' }],
   });
 
   return (
