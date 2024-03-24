@@ -5,7 +5,7 @@ import { ShoppingCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
 
 interface ShoppingCartButtonProps {
-  cart: ShoppingCart | null;
+  cart?: ShoppingCart | null;
 }
 
 function ShoppingCartButton({ cart }: ShoppingCartButtonProps) {
@@ -15,6 +15,7 @@ function ShoppingCartButton({ cart }: ShoppingCartButtonProps) {
       elem.blur();
     }
   }
+
   return (
     <div className="dropdown dropdown-end">
       <label tabIndex={0} className="btn-ghost btn-circle btn">

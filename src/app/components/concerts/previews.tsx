@@ -42,8 +42,12 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
           <div className="flex gap-3">
             {presale && (
               <div className="flex justify-center items-center">
-                <Link href={presale} target="_blank" className="underline uppercase text-primary hover:text-pk-green">
-                  VVK
+                <Link
+                  href={presale}
+                  target="_blank"
+                  className="btn btn-link uppercase text-primary hover:text-pk-green"
+                >
+                  Tickets
                 </Link>
               </div>
             )}

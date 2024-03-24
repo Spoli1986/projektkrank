@@ -5,6 +5,7 @@ import { env } from '../../../../utils/env';
 import { ShoppingCart, deleteAnonymousCart, getCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+import { drawTable } from 'pdf-lib-draw-table-beta/src/drawPDFTable';
 
 interface InvoiceTo {
   name: string;
@@ -21,11 +22,31 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
 
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
+  const tableHeader: string[][] = [['Position', 'Anzahl', 'Bezeichnung', 'Total']];
+
+  let tableRowData: string[][] = [];
+
+  cart?.items.map((item, index) =>
+    tableRowData.push([
+      (index + 1).toString(),
+      `${item.quantity} Stk`,
+      `${item.product.description} ${item.product.size ? `, Grösse ${item.product.size}` : ''}`,
+      formatPrice(item.product.price * item.quantity),
+    ]),
+  );
+
+  const totalRow = [['', '', 'Summe:', formatPrice(cart!.subtotal)]];
+  const shippingRow = [['', '', 'Versand:', formatPrice(1000)]];
+  const totalAmountRow = [['', '', 'Rechnungstotal:', formatPrice(cart!.subtotal + 1000)]];
+
+  const tableDataConcat: string[][] = tableHeader.concat(tableRowData, totalRow, shippingRow, totalAmountRow);
+  console.log(tableDataConcat);
   const cellPadding = 5;
   const cellWidth = 150;
   const cellHeight = 20;
   const startX = 50;
   let startY = page.getHeight() - 50;
+  const startYTable = (startY - 20) * cellHeight;
 
   const drawCell = (text: string, x: number, y: number) => {
     page.drawText(text, {
@@ -37,13 +58,13 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
     });
   };
 
-  const drawRow = (row: string[], y: number) => {
-    let x = startX;
-    row.forEach((cell, index) => {
-      drawCell(cell, x, y);
-      x += cellWidth;
-    });
-  };
+  // const drawRow = (row: string[], y: number) => {
+  //   let x = startX;
+  //   row.forEach((cell, index) => {
+  //     drawCell(cell, x, y);
+  //     x += cellWidth;
+  //   });
+  // };
 
   // Draw "Invoice To" address
   const invoiceToAddress = [
@@ -53,8 +74,9 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
     invoiceTo.zip + '' + invoiceTo.city,
     invoiceTo.country,
   ];
+
   invoiceToAddress.forEach((line, index) => {
-    drawCell(line, startX + 300, startY - index * cellHeight);
+    drawCell(line, startX + 300, startY - (index + 6) * cellHeight);
   });
 
   // Draw "From" address (assuming PK Labor4, Buchsisstrasse 4, 3380 Wangen an der Aare)
@@ -63,34 +85,53 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
     drawCell(line, startX, startY - index * cellHeight); // Adjust x position for "From" address
   });
 
-  cart!.items.forEach((item, rowIndex) => {
-    const row = [
-      (rowIndex + 1).toString(),
-      `${item.quantity} Stk`,
-      `${item.product.description} ${item.product.size ? `, Grösse ${item.product.size}` : ''}`,
-      formatPrice(item.product.price * item.quantity),
-    ];
+  const options = {
+    header: {
+      hasHeaderRow: true,
+      backgroundColor: rgb(0.9, 0.9, 0.9),
+    },
+  };
 
-    drawRow(row, startY - rowIndex * cellHeight);
-  });
-  page.drawRectangle({
-    x: startX,
-    y: startY - (cart!.items.length + 10) * cellHeight,
-    width: page.getWidth() - startX,
-    height: cellHeight,
-    color: rgb(0.7, 0.7, 0.7), // Grey background color
-  });
-  // Draw totals
-  const totalRow = ['', '', 'Summe:', formatPrice(cart!.subtotal)];
-  drawRow(totalRow, startY - (cart!.items.length + 20) * cellHeight);
+  const url = 'https://i.postimg.cc/RF8xrRHz/pk-logo.jpg';
+  const arrayBuffer = await fetch(url).then((res) => res.arrayBuffer());
+  const image4 = await pdfDoc.embedJpg(arrayBuffer);
 
-  // Draw shipping
-  const shippingRow = ['', '', 'Versand:', formatPrice(1000)];
-  drawRow(shippingRow, startY - (cart!.items.length + 30) * cellHeight);
+  // const tableDimensions = await drawTable(pdfDoc, page, tableDataConcat, 50, 50, options);
+  // console.log(tableDimensions);
 
-  // Draw total amount
-  const totalAmountRow = ['', '', 'Rechnungstotal:', formatPrice(cart!.subtotal + 1000)];
-  drawRow(totalAmountRow, startY - (cart!.items.length + 40) * cellHeight);
+  // page.drawText(
+  //   'Bitte beachte, dass der Rechnungsbetrag einschließlich Versandkosten auf das folgende Konto überwiesen werden sollte:',
+  // );
+
+  // cart!.items.forEach((item, rowIndex) => {
+  //   const row = [
+  //     (rowIndex + 1).toString(),
+  //     `${item.quantity} Stk`,
+  //     `${item.product.description} ${item.product.size ? `, Grösse ${item.product.size}` : ''}`,
+  //     formatPrice(item.product.price * item.quantity),
+  //   ];
+
+  //   drawRow(row, startY - (rowIndex + 20) * cellHeight);
+  //   rowIndex === cart!.items.length - 1 &&
+  //     page.drawRectangle({
+  //       x: startX,
+  //       y: startY - (rowIndex + 22) * cellHeight,
+  //       width: page.getWidth() - startX * 2,
+  //       height: cellHeight,
+  //       color: rgb(0.7, 0.7, 0.7), // Grey background color
+  //     });
+  // });
+  // // Draw totals
+
+  // drawRow(totalRow, startY - (cart!.items.length + 24) * cellHeight);
+
+  // // Draw shipping
+
+  // drawRow(shippingRow, startY - (cart!.items.length + 25) * cellHeight);
+
+  // // Draw total amount
+
+  // drawRow(totalAmountRow, startY - (cart!.items.length + 26) * cellHeight);
 
   return pdfDoc.saveAsBase64({ dataUri: true });
 }
@@ -164,10 +205,10 @@ export async function POST(request: NextRequest) {
         Hallo ${name},
       </p>
       <p>
-        Vielen Dank für Deine Bestellung bei uns. Wir schätzen Dein Vertrauen in unsere Band.
+      Vielen Dank für Deine Unterstützung und Deinen Einkauf bei uns! <br> Dein Beitrag trägt dazu bei, dass wir unsere Leidenschaft für Musik weiter ausleben können und wir sind dankbar für jeden, der uns dabei unterstützt.
       </p>
       <p>
-        Bitte überweise den Rechnungsbetrag inklusive Versandkosten auf folgendes Konto:
+      Bitte beachte, dass der Rechnungsbetrag einschließlich Versandkosten auf das folgende Konto überwiesen werden sollte:
       </p>
       <p>
         IBAN: CH41 0630 0371 0771 5512 / TWINT: 076 572 16 39<br>
