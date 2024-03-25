@@ -49,7 +49,6 @@ function NavItems() {
         <div className="flex md:hidden text-white text-3xl pr-5" onClick={handleOnClickMenu}>
           {navbar ? <FaX /> : <FaBars />}
         </div>
-        {/* <ShoppingCartButton /> */}
         <div
           className={
             navbar

@@ -12,7 +12,7 @@ function News({}: Props) {
     <div className="text-white pt-40 py-8 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col gap-10 items-center">
         <div className="p-6 text-center">
-          <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-pk-green">Große Neuigkeiten!</h2>
+          <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-pk-green">Grosse Neuigkeiten!</h2>
           <p className="mb-4 lg:text-3xl md:text-xl text-lg">
             Unser neuer Videoclip und unsere erste Single vom kommenden Album erblicken das Licht der Welt.
           </p>
@@ -21,7 +21,7 @@ function News({}: Props) {
           <p className="mb-4 lg:text-lg md:text-base text-sm">
             Zur Vorbestellung des neue Album “Aufbruch” klicke{' '}
             <Link
-              className="text-primary hover:text-pk-green active:text-[rgb(11,222,110)] underline uppercase"
+              className="text-primary hover:text-pk-green active:text-[rgb(11,222,110)] btn btn-link uppercase"
               href={'https://hypeddit.com/projektkrank/aufbruch'}
               target="_blank"
             >
