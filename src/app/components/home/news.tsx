@@ -14,7 +14,7 @@ function News({}: Props) {
         <div className="p-6 text-center">
           <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-pk-green">Grosse Neuigkeiten!</h2>
           <p className="mb-4 lg:text-3xl md:text-xl text-lg">
-            Unser neuer Videoclip und unsere erste Single vom kommenden Album erblicken das Licht der Welt.
+            Ein neuer Videoclip zum kimmenden Album ist seit kurzem Online.
           </p>
           <p className="mb-4 lg:text-2xl md:text-lg">Bereits jetzt kann man das Album vorbestellen.</p>
           <p className="mb-4 lg:text-xl">Das Album wird ab dem 03.05.2024 erhältlich sein.</p>
@@ -30,10 +30,7 @@ function News({}: Props) {
             !
           </p>
         </div>
-        <Youtube
-          src="https://www.youtube.com/embed/kdPTc8gFr7Y?si=bjhf-j4Pc3NmSX3X"
-          title="Projekt Krank - Alter Mann"
-        />
+        <Youtube src="https://www.youtube.com/embed/l_4zcsg_pVg?si=eTEfe-_QE4_BX40e" title="Projekt Krank - Aufbruch" />
         <Spotify src={alterMannSpotify} width="100%" height="352" />
         <div className="flex flex-col border-t w-[90%] mt-10 pt-10 items-center gap-14">
           <h2 className="lg:text-4xl md:text-3xl text-xl font-bold text-pk-green">Unser nächstes Konzert</h2>
