@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Image from 'next/image';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/footer/footer';
 import SessionProvider from './SessionProvider';
 import { Roboto } from 'next/font/google';
 import localFont from 'next/font/local';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: 'Projekt Krank',
@@ -35,6 +36,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <Footer />
         </SessionProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
