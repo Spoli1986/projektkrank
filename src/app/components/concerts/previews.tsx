@@ -61,7 +61,7 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
                     }
                   }}
                 >
-                  <Image src={flyer} alt="flyer" width={40} height={10} />
+                  <Image src={flyer} alt="flyer" width={40} height={10} style={{ width: 'auto', height: 'auto' }} />
                 </button>
                 <dialog id={`my_modal_${index}`} className="modal bg-pk-green/30">
                   <div className="flex flex-col h-full justify-center items-center">
@@ -69,7 +69,13 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
                       <form method="dialog">
                         {/* if there is a button in form, it will close the modal */}
                         <button className="">
-                          <Image src={flyer} alt="flyer" width={800} height={200} />
+                          <Image
+                            src={flyer}
+                            alt="flyer"
+                            width={800}
+                            height={200}
+                            style={{ width: 'auto', height: 'auto' }}
+                          />
                         </button>
                       </form>
                     </div>

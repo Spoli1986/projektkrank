@@ -4,7 +4,6 @@ import Navbar from './components/navbar/navbar';
 import Footer from './components/footer/footer';
 import SessionProvider from './SessionProvider';
 import { Roboto } from 'next/font/google';
-import localFont from 'next/font/local';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
   description: "The sickest band's homepage",
 };
 
-const kodemono = localFont({ src: '../../public/fonts/kodemono.ttf' });
 const roboto = Roboto({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] });
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

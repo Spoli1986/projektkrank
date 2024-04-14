@@ -15,7 +15,7 @@ export default async function Navbar() {
       className={`text-pk-green w-screen md:text-xl flex z-10 md:justify-center justify-between items-center fixed self-center font-semibold bg-black shadow-lg shadow-slate-600`}
     >
       <div className="sm:w-40 sm:h-20 w-32 h-16 p-5 relative">
-        <Image src={Logo} alt="logo" fill sizes="full" style={{ position: 'absolute' }} />
+        <Image src={Logo} alt="logo" fill sizes="full" style={{ position: 'absolute' }} priority />
       </div>
       <div className="flex md:flex-row-reverse flex-row items-center">
         {/* <UserMenuButton session={session} /> */}
