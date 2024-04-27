@@ -1,11 +1,11 @@
-"use client";
-import React, { useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
-import Tshirt from "../../../../public/tshirt.jpeg";
-import Image from "next/image";
+'use client';
+import React, { useState } from 'react';
+import { FaShoppingCart } from 'react-icons/fa';
+import Tshirt from '../../../../public/tshirt.jpeg';
+import Image from 'next/image';
 
 const TShirt = () => {
-  const [selected, setSelected] = useState<string>("s");
+  const [selected, setSelected] = useState<string>('s');
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
@@ -15,14 +15,14 @@ const TShirt = () => {
   return (
     <div className="t-shirt flex flex-col text-pk-green w-[80%] md:w-[250px] lg:[350px] ml-2">
       <Image src={Tshirt} alt="Tshirt" className=" rounded-lg" />
-      <div className="flex gap-1">
+      <div className="flex  gap-1">
         Grösse:
         <select
-          className="bg-transparent cursor-pointer"
+          className="bg-transparent cursor-pointer "
           onChange={(e) => {
             handleSelect(e);
           }}
-          defaultValue={"s"}
+          defaultValue={'s'}
         >
           <option value="s">S</option>
           <option value="m">M</option>

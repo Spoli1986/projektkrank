@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { incrementProductQuantity } from './actions';
+import { incrementProductQuantity } from '../../shop/[id]/actions';
 
 interface AddToCartButtonProps {
   productId: string;

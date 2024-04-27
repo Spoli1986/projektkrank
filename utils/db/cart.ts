@@ -17,6 +17,7 @@ export type CartItemWithProduct = Prisma.CartItemGetPayload<{
 
 export async function getCart(): Promise<ShoppingCart | null> {
   const session = await getServerSession(authOptions);
+  const shipping: number = 700;
 
   let cart: CartWithProducts | null = null;
 
@@ -39,7 +40,7 @@ export async function getCart(): Promise<ShoppingCart | null> {
   return {
     ...cart,
     size: cart.items.reduce((acc, item) => acc + item.quantity, 0),
-    subtotal: cart.items.reduce((acc, item) => acc + item.quantity * item.product.price, 0),
+    subtotal: cart.items.reduce((acc, item) => acc + item.quantity * item.product.price, 0) + shipping,
   };
 }
 
