@@ -40,7 +40,6 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
   const totalAmountRow = [['', '', 'Rechnungstotal:', formatPrice(cart!.subtotal + 1000)]];
 
   const tableDataConcat: string[][] = tableHeader.concat(tableRowData, totalRow, shippingRow, totalAmountRow);
-  console.log(tableDataConcat);
   const cellPadding = 5;
   const cellWidth = 150;
   const cellHeight = 20;
@@ -137,7 +136,8 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
 }
 
 export async function POST(request: NextRequest) {
-  const { email, name, address, phone, zip, country, total, cartId, orderId, city } = await request.json();
+  const { email, name, address, zip, country, total, cartId, orderId, city } = await request.json();
+  console.log(email);
   const invoiceTo: InvoiceTo = {
     name,
     address,
@@ -172,10 +172,10 @@ export async function POST(request: NextRequest) {
   const mailOptions: Mail.Options = {
     from: env.MY_EMAIL,
     to: email,
-    // cc: 'stefan@projektkrank.ch',
+    cc: env.MY_EMAIL,
     // cc: email, (uncomment this line if you want to send a copy to the sender)
     subject: `Bestellung projektkrank.ch Nr.: ${orderId}`,
-    text: `${name} hat etwas bestellt. Tel: ${phone}`,
+    text: `${name} hat etwas bestellt.`,
     html: `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -206,14 +206,6 @@ export async function POST(request: NextRequest) {
       </p>
       <p>
       Vielen Dank für Deine Unterstützung und Deinen Einkauf bei uns! <br> Dein Beitrag trägt dazu bei, dass wir unsere Leidenschaft für Musik weiter ausleben können und wir sind dankbar für jeden, der uns dabei unterstützt.
-      </p>
-      <p>
-      Bitte beachte, dass der Rechnungsbetrag einschließlich Versandkosten auf das folgende Konto überwiesen werden sollte:
-      </p>
-      <p>
-        IBAN: CH41 0630 0371 0771 5512 / TWINT: 076 572 16 39<br>
-        Empfänger: Stefan Gehri<br>
-        Mitteilung: ${orderId}
       </p>
       <p>
         Die bestellten Artikel werden nach Zahlungseingang innerhalb<br> der Nächsten 10 Tagen verschickt.
@@ -258,10 +250,6 @@ export async function POST(request: NextRequest) {
         <td>E-Mail:</td>
         <td>${email}</td>
       </tr>
-      <tr>
-        <td>Telefon:</td>
-        <td>${phone}</td>
-      </tr>
     </tbody>
   </table>
       <table>
@@ -288,17 +276,17 @@ export async function POST(request: NextRequest) {
           <tr>
             <td colspan="2"></td>
             <td style="font-weight: bold;">Summe</td>
-            <td style="font-weight: bold;">${formatPrice(cart?.subtotal!)}</td>
+            <td style="font-weight: bold;">${formatPrice(cart?.subtotal! - 700)}</td>
           </tr>
           <tr>
             <td colspan="2"></td>
             <td>Versand</td>
-            <td>${formatPrice(1000)}</td>
+            <td>${formatPrice(700)}</td>
           </tr>
           <tr>
             <td colspan="2"></td>
             <td style="font-weight: bold;">Rechnungstotal</td>
-            <td style="font-weight: bold;">${formatPrice(cart?.subtotal! + 1000)}</td>
+            <td style="font-weight: bold;">${formatPrice(cart?.subtotal!)}</td>
           </tr>
         </tbody>
       </table>
@@ -306,13 +294,13 @@ export async function POST(request: NextRequest) {
     </html>
     
     `,
-    attachments: [
-      {
-        filename: 'invoice' + orderId + '.pdf',
-        content: pdfBase64String.split('base64,')[1],
-        encoding: 'base64',
-      },
-    ],
+    // attachments: [
+    //   {
+    //     filename: 'invoice' + orderId + '.pdf',
+    //     content: pdfBase64String.split('base64,')[1],
+    //     encoding: 'base64',
+    //   },
+    // ],
   };
 
   const sendMailPromise = () =>
@@ -328,7 +316,7 @@ export async function POST(request: NextRequest) {
 
   try {
     await sendMailPromise();
-    deleteAnonymousCart(cartId);
+    await deleteAnonymousCart(cartId);
     return NextResponse.json({ message: 'Email sent' });
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });

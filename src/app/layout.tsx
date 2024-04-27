@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Image from 'next/image';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/footer/footer';
 import SessionProvider from './SessionProvider';
@@ -14,6 +13,7 @@ export const metadata: Metadata = {
 
 const kodemono = localFont({ src: '../../public/fonts/kodemono.ttf' });
 const roboto = Roboto({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] });
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

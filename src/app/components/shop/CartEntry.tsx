@@ -9,12 +9,12 @@ import { setProductQuantity } from '../../shop/cart/actions';
 
 interface CartEntryProps {
   cartItem: CartItemWithProduct;
-  setProductQuantity: (productId: string, quantity: number) => Promise<void>;
 }
 
 function CartEntry({ cartItem: { product, quantity } }: CartEntryProps) {
   const [isPending, startTransition] = useTransition();
   const quantityOptions: JSX.Element[] = [];
+
   for (let i = 1; i <= 99; i++) {
     quantityOptions.push(
       <option value={i} key={i}>
@@ -23,9 +23,9 @@ function CartEntry({ cartItem: { product, quantity } }: CartEntryProps) {
     );
   }
   return (
-    <div>
+    <div className="w-full">
       <div className="flex flex-wrap items-center gap-4">
-        <Image src={product.imageUrl} alt={product.name} width={200} height={200} className="rounded-lg" />
+        <Image src={product.imageUrl[0]} alt={product.name} width={200} height={200} className="rounded-lg" />
       </div>
       <div>
         <Link href={'/shop/' + product.id} className="font-bold">
