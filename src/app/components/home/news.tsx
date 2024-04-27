@@ -14,7 +14,7 @@ function News({}: Props) {
         <div className="p-6 text-center">
           <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-pk-green">Grosse Neuigkeiten!</h2>
           <p className="mb-4 lg:text-3xl md:text-xl text-lg">
-            Ein neuer Videoclip zum kimmenden Album ist seit kurzem Online.
+            Ein neuer Videoclip zum kommenden Album ist seit kurzem Online.
           </p>
           <p className="mb-4 lg:text-2xl md:text-lg">Bereits jetzt kann man das Album vorbestellen.</p>
           <p className="mb-4 lg:text-xl">Das Album wird ab dem 03.05.2024 erhältlich sein.</p>
