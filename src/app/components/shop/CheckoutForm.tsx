@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { ShoppingCart } from '../../../../utils/db/cart';
 import CartEntry from './CartEntry';
-import { setProductQuantity } from '@/app/shop/cart/actions';
 import { formatPrice } from '../../../../utils/utils';
 import StripeCheckout from '../stripe/StripeCheckout';
 
