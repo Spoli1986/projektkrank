@@ -7,8 +7,8 @@ const envSchema = zod.object({
   NEXTAUTH_SECRET: zod.string().min(1),
   MY_EMAIL: zod.string().min(1),
   MY_PASSWORD: zod.string().min(1),
-  STRIPE_PUBLIC: zod.string().min(1),
-  STRIPE_PUBLISH: zod.string().min(1),
+  // STRIPE_PUBLIC: zod.string().min(1),
+  // STRIPE_PUBLISH: zod.string().min(1),
   STRIPE_SECRET: zod.string().min(1),
 });
 
