@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       currency: 'chf',
       payment_method_types: ['card'],
     });
-
+    console.log('payment intent: ', paymentIntent);
     return NextResponse.json(
       { secret: paymentIntent.client_secret },
 
