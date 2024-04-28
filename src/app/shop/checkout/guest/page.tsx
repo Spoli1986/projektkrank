@@ -15,8 +15,9 @@ async function getClinetSecret(price: number | undefined) {
       },
       body: JSON.stringify({ price: price }),
     });
-
+    console.log('after fetch secret');
     if (!res.ok) {
+      console.log(res);
       throw new Error(`Failed to fetch data. Status: ${res.status}`);
     }
     const data = await res.json();
@@ -31,6 +32,7 @@ async function Checkout() {
   const price = cart?.subtotal;
 
   const clientSecret = await getClinetSecret(price);
+  console.log('payment intent: ', clientSecret);
 
   return (
     <div className="flex flex-col text-center mt-52">

@@ -6,15 +6,15 @@ import { Stripe } from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET!);
 console.log('env stripe secret: ', process.env.STRIPE_SECRET);
 export async function POST(request: NextRequest) {
-  // const { price } = await request.json();
+  const { price } = await request.json();
   try {
     console.log('try');
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1500,
+      amount: price,
       currency: 'chf',
       payment_method_types: ['card'],
     });
-    console.log('payment intent: ', paymentIntent);
+    console.log('payment intent: ', paymentIntent.client_secret);
     return NextResponse.json(
       { secret: paymentIntent.client_secret },
 
