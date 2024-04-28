@@ -7,7 +7,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET!);
 console.log('env stripe secret: ', process.env.STRIPE_SECRET);
 export async function POST(request: NextRequest) {
   const { price } = await request.json();
-  console.log('price', price);
   try {
     console.log('try');
     const paymentIntent = await stripe.paymentIntents.create({

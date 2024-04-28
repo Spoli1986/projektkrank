@@ -19,7 +19,7 @@ async function getClinetSecret(price: number | undefined) {
       throw new Error(`Failed to fetch data. Status: ${res.status}`);
     }
     const data = await res.json();
-    console.log(data);
+    console.log('res.json client: ', data);
     return data.secret;
   } catch (error) {
     console.error('Error occured: ', error);
@@ -30,8 +30,10 @@ async function Checkout() {
   const cart = await getCart();
   const price = cart?.subtotal;
   console.log('price client: ', price);
+
   const clientSecret = await getClinetSecret(price);
-  console.log(clientSecret);
+
+  console.log('clientsecret client: ', clientSecret);
 
   return (
     <div className="flex flex-col text-center mt-52">
