@@ -16,7 +16,6 @@ async function getClinetSecret(price: number | undefined) {
       body: JSON.stringify({ price: price }),
     });
 
-    console.log('res.json client: ', res);
     if (!res.ok) {
       throw new Error(`Failed to fetch data. Status: ${res.status}`);
     }
