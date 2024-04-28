@@ -15,11 +15,11 @@ async function getClinetSecret(price: number | undefined) {
       body: JSON.stringify({ price }),
     });
 
+    console.log('res.json client: ', res);
     if (!res.ok) {
       throw new Error(`Failed to fetch data. Status: ${res.status}`);
     }
     const data = await res.json();
-    console.log('res.json client: ', data);
     return data.secret;
   } catch (error) {
     console.error('Error occured: ', error);
