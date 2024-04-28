@@ -5,6 +5,7 @@ import StripeWrapper from '@/app/components/stripe/StripeWrapper';
 
 async function getClinetSecret(price: number | undefined) {
   const link = new URL(`${process.env.NEXTAUTH_URL}/api/stripe`);
+  console.log(link);
   try {
     const res = await fetch(link, {
       method: 'POST',
@@ -18,6 +19,7 @@ async function getClinetSecret(price: number | undefined) {
       throw new Error(`Failed to fetch data. Status: ${res.status}`);
     }
     const data = await res.json();
+    console.log(data);
     return data.secret;
   } catch (error) {
     console.error('Error occured: ', error);
