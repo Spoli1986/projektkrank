@@ -4,17 +4,18 @@ import { env } from '../../../../utils/env';
 import { Stripe } from 'stripe';
 
 const stripe = new Stripe(env.STRIPE_SECRET);
+console.log('env stripe secret: ', env.STRIPE_SECRET);
 export async function POST(request: NextRequest) {
   try {
     const { price } = await request.json();
-
+    console.log(price);
     const paymentIntent = await stripe.paymentIntents.create({
       amount: price,
       currency: 'chf',
       payment_method_types: ['card'],
     });
 
-    console.log(paymentIntent.client_secret);
+    console.log('payment intent secret: ', paymentIntent.client_secret);
     return NextResponse.json(
       { secret: paymentIntent.client_secret },
 
