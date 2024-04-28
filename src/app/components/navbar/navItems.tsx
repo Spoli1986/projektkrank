@@ -45,7 +45,6 @@ function NavItems() {
             </Link>
           </li>
         </ul>
-        <Link href="/shoppingcart" title="Shopping Cart"></Link>
         <div className="flex md:hidden text-white text-3xl pr-5" onClick={handleOnClickMenu}>
           {navbar ? <FaX /> : <FaBars />}
         </div>
