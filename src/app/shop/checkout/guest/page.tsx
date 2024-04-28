@@ -5,7 +5,8 @@ import StripeWrapper from '@/app/components/stripe/StripeWrapper';
 
 async function getClinetSecret(price: number | undefined) {
   const link = new URL(`${process.env.NEXTAUTH_URL}/api/stripe`);
-  console.log(link);
+
+  console.log('price client: ', price);
   try {
     const res = await fetch(link, {
       method: 'POST',
