@@ -30,11 +30,8 @@ async function getClinetSecret(price: number | undefined) {
 async function Checkout() {
   const cart = await getCart();
   const price = cart?.subtotal;
-  console.log('price client: ', price);
 
   const clientSecret = await getClinetSecret(price);
-
-  console.log('clientsecret client: ', clientSecret);
 
   return (
     <div className="flex flex-col text-center mt-52">

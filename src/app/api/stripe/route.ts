@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
     });
 
-    console.log('payment intent secret: ', paymentIntent.client_secret);
     return NextResponse.json(
       { secret: paymentIntent.client_secret },
 
