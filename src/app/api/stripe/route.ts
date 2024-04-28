@@ -3,8 +3,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { env } from '../../../../utils/env';
 import { Stripe } from 'stripe';
 
-const stripe = new Stripe(env.STRIPE_SECRET);
-console.log('env stripe secret: ', env.STRIPE_SECRET);
+const stripe = new Stripe(process.env.STRIPE_SECRET!);
+console.log('env stripe secret: ', process.env.STRIPE_SECRET);
 export async function POST(request: NextRequest) {
   const { price } = await request.json();
   try {
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: 'Error processing payment intent' }, { status: 500 });
   }
 }
