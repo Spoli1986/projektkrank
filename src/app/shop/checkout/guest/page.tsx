@@ -29,7 +29,7 @@ async function getClinetSecret(price: number | undefined) {
 async function Checkout() {
   const cart = await getCart();
   const price = cart?.subtotal;
-
+  console.log('price client: ', price);
   const clientSecret = await getClinetSecret(price);
   console.log(clientSecret);
 
