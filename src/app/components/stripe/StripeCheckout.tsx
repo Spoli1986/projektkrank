@@ -83,7 +83,7 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
     const { error: confirmError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.NEXTAUTH_URL}/shop/checkout/success,`,
+        return_url: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/shop/checkout/success,`,
         payment_method_data: {
           billing_details: {
             email: email,
