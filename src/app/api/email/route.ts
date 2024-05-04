@@ -276,12 +276,12 @@ export async function POST(request: NextRequest) {
           <tr>
             <td colspan="2"></td>
             <td style="font-weight: bold;">Summe</td>
-            <td style="font-weight: bold;">${formatPrice(cart?.subtotal! - 700)}</td>
+            <td style="font-weight: bold;">${formatPrice(cart?.subtotal! - 500)}</td>
           </tr>
           <tr>
             <td colspan="2"></td>
             <td>Versand</td>
-            <td>${formatPrice(700)}</td>
+            <td>${formatPrice(500)}</td>
           </tr>
           <tr>
             <td colspan="2"></td>
