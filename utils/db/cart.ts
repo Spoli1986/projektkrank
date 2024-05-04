@@ -3,6 +3,7 @@ import { prisma } from './prisma';
 import { cookies } from 'next/dist/client/components/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { env } from '../env';
 
 export type CartWithProducts = Prisma.CartGetPayload<{ include: { items: { include: { product: true } } } }>;
 
@@ -17,7 +18,7 @@ export type CartItemWithProduct = Prisma.CartItemGetPayload<{
 
 export async function getCart(): Promise<ShoppingCart | null> {
   const session = await getServerSession(authOptions);
-  const shipping: number = 700;
+  const shipping = process.env.SHIPPING_COST!;
 
   let cart: CartWithProducts | null = null;
 
@@ -40,7 +41,7 @@ export async function getCart(): Promise<ShoppingCart | null> {
   return {
     ...cart,
     size: cart.items.reduce((acc, item) => acc + item.quantity, 0),
-    subtotal: cart.items.reduce((acc, item) => acc + item.quantity * item.product.price, 0) + shipping,
+    subtotal: cart.items.reduce((acc, item) => acc + item.quantity * item.product.price, 0) + Number(shipping),
   };
 }
 

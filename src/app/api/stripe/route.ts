@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { env } from '../../../../utils/env';
 import { Stripe } from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET!);
+const stripe = new Stripe(env.STRIPE_SECRET!);
 
 export async function POST(request: NextRequest) {
   const { price } = await request.json();
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { secret: paymentIntent.client_secret },
+      { secret: paymentIntent },
 
       { status: 200 },
     );

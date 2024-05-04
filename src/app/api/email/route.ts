@@ -93,7 +93,7 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
 
   const url = 'https://i.postimg.cc/RF8xrRHz/pk-logo.jpg';
   const arrayBuffer = await fetch(url).then((res) => res.arrayBuffer());
-  const image4 = await pdfDoc.embedJpg(arrayBuffer);
+  // const image4 = await pdfDoc.embedJpg(arrayBuffer);
 
   // const tableDimensions = await drawTable(pdfDoc, page, tableDataConcat, 50, 50, options);
   // console.log(tableDimensions);

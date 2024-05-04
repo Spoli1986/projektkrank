@@ -10,6 +10,7 @@ const envSchema = zod.object({
   // STRIPE_PUBLIC: zod.string().min(1),
   // STRIPE_PUBLISH: zod.string().min(1),
   STRIPE_SECRET: zod.string().min(1),
+  // SHIPPING_COST: zod.string().transform((value) => parseFloat(value)),
 });
 
 export const env = envSchema.parse(process.env);

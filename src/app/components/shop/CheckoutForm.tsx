@@ -15,16 +15,16 @@ export default function CheckoutForm({ cart }: CheckoutFormProps) {
   const [formSuccessMessage, setFormSuccessMessage] = useState('');
 
   return (
-    <div className="flex justify-center bg-slate-200">
+    <div className="flex justify-center bg-slate-200/10 w-full sm:w-max rounded-md">
       {formSuccess ? (
         <div className="text-success text-3xl">{formSuccessMessage}</div>
       ) : (
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:justify-center w-full sm:p-2 py-4">
-          <div className="flex flex-col gap-1 w-[90%] sm:w-max  text-slate-500 border bg-slate-100 rounded-md  p-2 sm:p-10">
+          <div className="flex flex-col gap-1 w-[90%] sm:w-max  text-[#30313d] border bg-slate-100/80 rounded-md p-2 sm:p-10">
             {cart?.items.map((item) => <CartEntry cartItem={item} key={item.id} />)}
-            <span className="text-left text-xl">Shipping: {formatPrice(700)}</span>
+            <span className="text-left italic text-info text-lg">Shipping: {formatPrice(500)}</span>
             <div className="divider"></div>
-            <span className="font-bold text-left text-3xl">Total: {formatPrice(cart?.subtotal!)}</span>
+            <span className="font-semibold text-left text-3xl">Total: {formatPrice(cart?.subtotal!)}</span>
           </div>
           <StripeCheckout cart={cart} />
         </div>

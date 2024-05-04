@@ -1,12 +1,13 @@
 'use client';
 
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { deleteAnonymousCart, ShoppingCart } from '../../../../utils/db/cart';
-import { useEffect, useState } from 'react';
+import { ShoppingCart } from '../../../../utils/db/cart';
+import { useState } from 'react';
 import '@stripe/stripe-js'; // Import this to ensure the CSS is included
 import { formatPrice, generateRandomHexString } from '../../../../utils/utils';
 import { StripeAddressElementChangeEvent } from '@stripe/stripe-js';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { env } from '../../../../utils/env';
 
 interface CheckoutFormProps {
   cart: ShoppingCart | null;
@@ -41,11 +42,21 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
     zip: '',
     country: '',
   });
-
-  const price: number | undefined = cart?.subtotal;
-  const cartId: string | undefined = cart?.id;
+  const searchParams = useSearchParams();
+  const pathname = '/shop/checkout/error';
+  const { replace } = useRouter();
   const orderId: string = generateRandomHexString(16);
   const router = useRouter();
+
+  function handleSearch(message: string | undefined) {
+    const params = new URLSearchParams(searchParams);
+    if (message) {
+      params.set('message', message);
+    } else {
+      params.delete('message');
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
 
   const handleInput = (e: StripeAddressElementChangeEvent) => {
     setFormData((prevState) => ({
@@ -69,12 +80,10 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
       return;
     }
 
-    // const paymentElement = elements.getElement(PaymentElement);
-
     const { error: confirmError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/shop/checkout/success',
+        return_url: `${process.env.NEXTAUTH_URL}/shop/checkout/success,`,
         payment_method_data: {
           billing_details: {
             email: email,
@@ -86,6 +95,11 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
 
     if (confirmError) {
       console.log(confirmError);
+      if (confirmError.code === 'card_declined') {
+        handleSearch(confirmError.message);
+      } else {
+        router.push('/shop/checkout/error');
+      }
     } else {
       fetch(formURL, {
         method: 'POST',
@@ -112,7 +126,7 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-2 flex flex-col justify-center sm:w-[340px] w-[90%] border bg-slate-100 rounded-md p-2 sm:p-10"
+      className="space-y-2 flex flex-col justify-center sm:w-[340px] w-[90%] border bg-slate-100/80 rounded-md p-2 sm:p-10"
       action="/api/email"
     >
       <PaymentElement className="text-red" />
