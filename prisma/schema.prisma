@@ -109,6 +109,8 @@ model Event {
   city    String
   presale String?
   past    Boolean
+  address String?
+  link    String?
 
   @@map("events")
 }

@@ -10,7 +10,6 @@ type StripeWrapperProps = {
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC!);
 
 const StripeWrapper = ({ children, clientSecret }: StripeWrapperProps) => {
-  console.log(clientSecret);
   return (
     <Elements stripe={stripePromise} options={{ clientSecret }}>
       {children}

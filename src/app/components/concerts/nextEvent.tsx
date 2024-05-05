@@ -20,6 +20,8 @@ async function NextEvent({}: Props) {
         presale={nextEvent[0].presale}
         city={nextEvent[0].city}
         index={0}
+        address={nextEvent[0].address || undefined}
+        link={nextEvent[0].link || undefined}
       />
     </div>
   );

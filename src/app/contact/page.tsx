@@ -29,7 +29,6 @@ function Contact({}: Props) {
     e.preventDefault();
 
     const formURL = e.target.action;
-    console.log(formData);
     fetch(formURL, {
       method: 'POST',
       body: JSON.stringify(formData),
@@ -38,7 +37,6 @@ function Contact({}: Props) {
       },
     })
       .then((response) => {
-        console.log(response);
         // response.json();
       })
       .then((data) => {

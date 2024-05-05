@@ -16,7 +16,6 @@ async function Events({}: Props) {
     },
     orderBy: [{ date: 'asc' }],
   });
-
   return (
     <div className="flex flex-col gap-3 w-screen justify-center items-center mt-28">
       <h1 className="text-pk-green text-4xl uppercase underline mb-12">Upcoming</h1>
@@ -31,6 +30,8 @@ async function Events({}: Props) {
             presale={event.presale}
             city={event.city}
             index={index}
+            address={event.address || undefined}
+            link={event.link || undefined}
           />
         ))}
       </div>
@@ -46,6 +47,8 @@ async function Events({}: Props) {
             place={event.place}
             presale={event.presale}
             city={event.city}
+            address={event.address || undefined}
+            link={event.link || undefined}
           />
         ))}
       </div>

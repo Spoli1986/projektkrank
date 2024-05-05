@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaLocationDot } from 'react-icons/fa6';
 import { formatDate } from '../../../../utils/utils';
+import AddressLink from '../common/AddressLink';
+import LocationComponent from '../common/LocationLink';
 
 type Props = {
   flyer?: string | null;
@@ -13,9 +15,11 @@ type Props = {
   presale?: string | null;
   city: string;
   index: number;
+  address?: string;
+  link?: string;
 };
 
-function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
+function Previews({ flyer, date, bands, place, presale, city, address, link, index }: Props) {
   return (
     <div className="border-b-2 pb-1 w-[80%] lg:w-[760px]">
       <div className="text-slate-300 flex flex-col sm:flex-row rounded-md p-2 gap-3 bg-transparent/20">
@@ -24,9 +28,24 @@ function Previews({ flyer, date, bands, place, presale, city, index }: Props) {
             <h2 className="text-lg w-24">{formatDate(date)}</h2>
           </div>
           <div className="sm:w-48 w-1/2">
-            <div className="text-xl text-secondary">{place}</div>
+            <div className="text-xl text-secondary">
+              {link ? (
+                <LocationComponent link={link}>
+                  <span>{place}</span>
+                </LocationComponent>
+              ) : (
+                <span>{place}</span>
+              )}
+            </div>
             <div className="flex gap-1 items-center">
-              <FaLocationDot className="text-red-400" /> {city}
+              <FaLocationDot className="text-red-400" />
+              {address ? (
+                <AddressLink address={address}>
+                  <span>{city}</span>
+                </AddressLink>
+              ) : (
+                <span>{city}</span>
+              )}
             </div>
           </div>
         </div>
