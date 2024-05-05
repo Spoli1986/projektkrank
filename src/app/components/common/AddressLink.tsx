@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { getMapLink } from '../../../../utils/utils';
 import Link from 'next/link';
 
@@ -8,7 +8,14 @@ interface AddressProps {
 }
 
 const AddressComponent: React.FC<AddressProps> = ({ address, children }) => {
-  const mapLink = getMapLink(address);
+  const [mapLink, setMapLink] = useState<string>('');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const link = getMapLink(address);
+      setMapLink(link);
+    }
+  }, [address]);
 
   return (
     <Link href={mapLink} target="_blank" rel="noopener noreferrer">
