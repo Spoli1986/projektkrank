@@ -25,3 +25,19 @@ export function generateRandomHexString(length: number): string {
   }
   return result;
 }
+
+export function getMapLink(location: string): string {
+  if (typeof window !== 'undefined' && window.navigator) {
+    const isIOS = /iPad|iPhone|iPod/.test(window.navigator.userAgent);
+    const isAndroid = /Android/.test(window.navigator.userAgent);
+
+    if (isIOS) {
+      return `https://maps.apple.com/?q=${encodeURIComponent(location)}`;
+    } else if (isAndroid) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+    }
+  }
+
+  // Default to Google Maps link for other platforms or server-side rendering
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+}

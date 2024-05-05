@@ -96,7 +96,6 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
   // const image4 = await pdfDoc.embedJpg(arrayBuffer);
 
   // const tableDimensions = await drawTable(pdfDoc, page, tableDataConcat, 50, 50, options);
-  // console.log(tableDimensions);
 
   // page.drawText(
   //   'Bitte beachte, dass der Rechnungsbetrag einschließlich Versandkosten auf das folgende Konto überwiesen werden sollte:',
@@ -137,7 +136,6 @@ async function generateInvoicePDF(cart: ShoppingCart | null, invoiceTo: InvoiceT
 
 export async function POST(request: NextRequest) {
   const { email, name, address, zip, country, total, cartId, orderId, city } = await request.json();
-  console.log(email);
   const invoiceTo: InvoiceTo = {
     name,
     address,

@@ -94,7 +94,6 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
     });
 
     if (confirmError) {
-      console.log(confirmError);
       if (confirmError.code === 'card_declined') {
         handleSearch(confirmError.message);
       } else {
