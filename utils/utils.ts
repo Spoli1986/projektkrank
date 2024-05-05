@@ -31,14 +31,13 @@ export function getMapLink(location: string): string {
     console.log(window);
     const isIOS = /iPad|iPhone|iPod|Safari/.test(window.navigator.userAgent);
 
-    const isAndroid = /Android/.test(window.navigator.userAgent);
-
-    if (isIOS) {
+    const isAndroid = /Android|Chrome/.test(window.navigator.userAgent);
+    if (isAndroid && isIOS) {
+      console.log('chrome');
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+    } else if (isIOS) {
       console.log('ios');
       return `https://maps.apple.com/?q=${encodeURIComponent(location)}`;
-    } else if (isAndroid) {
-      console.log('android');
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
     }
   }
   // Default to Google Maps link for other platforms or server-side rendering
