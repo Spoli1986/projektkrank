@@ -203,7 +203,7 @@ export async function POST(request: NextRequest) {
         Hallo ${name},
       </p>
       <p>
-      Vielen Dank für Deine Unterstützung und Deinen Einkauf bei uns! <br> Dein Beitrag trägt dazu bei, dass wir unsere Leidenschaft für Musik weiter ausleben können und wir sind dankbar für jeden, der uns dabei unterstützt.
+      Vielen Dank für deinen Einkauf bei uns! Dein Beitrag trägt dazu bei, dass wir unsere Leidenschaft für Musik weiter ausleben können. Wir sind für jede Unterstützung sehr dankbar.
       </p>
       <p>
         Die bestellten Artikel werden nach Zahlungseingang innerhalb<br> der Nächsten 10 Tagen verschickt.
