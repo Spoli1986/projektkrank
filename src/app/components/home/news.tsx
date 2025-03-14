@@ -12,9 +12,9 @@ function News({}: Props) {
     <div className="text-white pt-40 py-8 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col gap-10 items-center">
         <div className="p-6 text-center">
-          <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-pk-green">Grosse Neuigkeiten!</h2>
+          <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-error">ACHTUNG!</h2>
           <p className="mb-4 lg:text-3xl md:text-xl text-lg">
-            Unser <Link href={'/shop'}>SHOP</Link> ist seit kurzem Online!
+            Das Konzert vom 15.03.2025 im Sedel Luzern wurde abgesagt!!!
           </p>
         </div>
         <Spotify src={alterMannSpotify} width="100%" height="352" />
