@@ -11,12 +11,13 @@ function News({}: Props) {
   return (
     <div className="text-white pt-40 py-8 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex flex-col gap-10 items-center">
-        <div className="p-6 text-center">
+        {/* <div className="p-6 text-center">
           <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-error">ACHTUNG!</h2>
           <p className="mb-4 lg:text-3xl md:text-xl text-lg">
             Das Konzert vom 15.03.2025 im Sedel Luzern wurde abgesagt!!!
+            s
           </p>
-        </div>
+        </div> */}
         <Spotify src={alterMannSpotify} width="100%" height="352" />
         <div className="flex flex-col border-t w-[90%] mt-10 pt-10 items-center gap-14">
           <h2 className="lg:text-4xl md:text-3xl text-xl font-bold text-pk-green">Unser nächstes Konzert</h2>
