@@ -15,6 +15,7 @@ function News({}: Props) {
           <h2 className="lg:text-6xl md:text-5xl text-4xl font-bold mb-14 text-error">ACHTUNG!</h2>
           <p className="mb-4 lg:text-3xl md:text-xl text-lg">
             Das Konzert vom 15.03.2025 im Sedel Luzern wurde abgesagt!!!
+            s
           </p>
         </div> */}
         <Spotify src={alterMannSpotify} width="100%" height="352" />
