@@ -3,7 +3,6 @@ import ShoppingCartButton from './ShoppingCartButton';
 import NavItems from './navItems';
 import Logo from '../../../../public/Logo ohne Hintergrund.png';
 import Image from 'next/image';
-import UserMenuButton from './UserMenuButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
@@ -17,11 +16,10 @@ export default async function Navbar() {
       <div className="sm:w-40 sm:h-20 w-32 h-16 p-5 relative">
         <Image src={Logo} alt="logo" fill sizes="full" style={{ position: 'absolute' }} priority />
       </div>
-      <div className="flex md:flex-row-reverse flex-row items-center">
-        {/* <UserMenuButton session={session} /> */}
+      {/* <div className="flex md:flex-row-reverse flex-row items-center">
         <ShoppingCartButton cart={cart} />
         <NavItems />
-      </div>
+      </div> */}
     </header>
   );
 }
