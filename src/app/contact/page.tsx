@@ -99,7 +99,7 @@ function Contact({}: Props) {
             />
           </div>
           <div className="flex flex-col">
-            <label htmlFor="message">Nachricht</label>
+            <label htmlFor="message">Message</label>
             <textarea
               name="message"
               id="message"
