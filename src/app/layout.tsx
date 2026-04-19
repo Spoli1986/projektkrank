@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import '@/app/globals.css';
+import './globals.css';
 import Navbar from './components/navbar/navbar';
 import Footer from './components/footer/footer';
 import SessionProvider from './SessionProvider';
