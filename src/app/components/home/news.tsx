@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Spotify from '../common/frames/spotify';
+import Youtube from '../common/frames/youtube';
 
 type Props = {};
 
@@ -19,6 +20,29 @@ function News({}: Props) {
         <Link href="/contact" className="text-xl md:text-2xl underline">
           Contact
         </Link>
+        <div className="grid w-3/5 grid-cols-2 gap-2 p-2 text-white md:items-center md:p-0">
+          <div className="min-w-0">
+            <Youtube
+              src="https://www.youtube.com/embed/l_4zcsg_pVg?si=eTEfe-_QE4_BX40e"
+              title="Projekt Krank - Aufbruch"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <Youtube
+              src="https://www.youtube.com/embed/kdPTc8gFr7Y?si=bjhf-j4Pc3NmSX3X"
+              title="Projekt Krank - Alter Mann"
+            />
+          </div>
+
+          <div className="min-w-0">
+            <Youtube src="https://www.youtube.com/embed/5JPghLhYohw" title="Projekt Krank - Sorg" />
+          </div>
+
+          <div className="min-w-0">
+            <Youtube src="https://www.youtube.com/embed/5l975lskWAk?si=DHvaA1JIpYsFCiac" title="Projekt Krank video" />
+          </div>
+        </div>
       </div>
     </div>
   );

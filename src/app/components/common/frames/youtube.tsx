@@ -1,11 +1,11 @@
-type Props = { src: string; title: string };
-
-function Youtube({ src, title }: Props) {
+export default function Youtube({ src, title }: { src: string; title: string }) {
   return (
-    <div className="aspect-video md:w-[853px]">
-      <iframe width="100%" className="h-full w-full" src={src} title={title}></iframe>
-    </div>
+    <iframe
+      src={src}
+      title={title}
+      className="aspect-video w-full rounded-lg"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
   );
 }
-
-export default Youtube;
