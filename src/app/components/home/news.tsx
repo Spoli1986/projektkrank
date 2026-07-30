@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Spotify from '../common/frames/spotify';
-import { Youtube } from '../common/frames/youtube';
+import Youtube from '../common/frames/youtube';
 
 type Props = {};
 

@@ -1,4 +1,4 @@
-export function Youtube({ src, title }: { src: string; title: string }) {
+export default function Youtube({ src, title }: { src: string; title: string }) {
   return (
     <iframe
       src={src}
