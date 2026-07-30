@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart } from '../../../../utils/db/cart';
+import { FiShoppingBag } from 'react-icons/fi';
+import type { ShoppingCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
 
 interface ShoppingCartButtonProps {
@@ -10,43 +11,36 @@ interface ShoppingCartButtonProps {
 
 function ShoppingCartButton({ cart }: ShoppingCartButtonProps) {
   function closeDropdown() {
-    const elem = document.activeElement as HTMLElement;
-    if (elem) {
-      elem.blur();
-    }
+    const element = document.activeElement as HTMLElement | null;
+    element?.blur();
   }
 
   return (
     <div className="dropdown dropdown-end">
-      <label tabIndex={0} className="btn-ghost btn-circle btn">
-        <div className="indicator">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-          <span className="badge badge-sm indicator-item">{cart?.size || 0}</span>
+      <button
+        type="button"
+        tabIndex={0}
+        aria-label={`Warenkorb mit ${cart?.size ?? 0} Artikeln`}
+        className="icon-button relative"
+      >
+        <FiShoppingBag className="h-5 w-5" aria-hidden />
+        <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-pk-green px-1 text-[10px] font-black text-black">
+          {cart?.size ?? 0}
+        </span>
+      </button>
+
+      <div
+        tabIndex={0}
+        className="surface dropdown-content z-50 mt-3 w-64 p-4 text-white"
+      >
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">Warenkorb</p>
+        <div className="mt-2 flex items-end justify-between gap-4">
+          <span className="text-lg font-bold">{cart?.size ?? 0} Artikel</span>
+          <span className="text-sm text-pk-green">{formatPrice(cart?.subtotal ?? 0)}</span>
         </div>
-      </label>
-      <div tabIndex={0} className="card dropdown-content card-compact mt-3 w-52 bg-base-100 shadow z-50">
-        <div className="card-body">
-          <span className="text-lg font-bold">{cart?.size || 0}</span>
-          <span className="text-info">Subtotal: {formatPrice(cart?.subtotal || 0)}</span>
-          <div className="card-actions">
-            <Link href="/shop/cart" className="btn btn-primary btn-block" onClick={closeDropdown}>
-              View Cart
-            </Link>
-          </div>
-        </div>
+        <Link href="/shop/cart" className="pk-button mt-4 w-full" onClick={closeDropdown}>
+          Warenkorb öffnen
+        </Link>
       </div>
     </div>
   );
