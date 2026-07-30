@@ -149,7 +149,7 @@ export default async function Home() {
           <div className="surface-strong mt-6 grid gap-8 overflow-hidden p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <p className="eyebrow">Drummer wanted</p>
-              <h3 className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-4xl">Schlagzeug gesucht.</h3>
+              <h3 className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-4xl">Schlagzeuger gesucht.</h3>
               <p className="section-copy mt-3">Tight, laut und klickfest? Dann sollten wir uns kennenlernen.</p>
             </div>
             <Link href="/#contact" className="pk-button">
@@ -279,7 +279,7 @@ export default async function Home() {
           <div>
             <p className="eyebrow">Kontakt</p>
             <h2 className="section-title mt-2">Schreib uns.</h2>
-            <p className="section-copy mt-3">Booking, Presse oder Schlagzeug?</p>
+            <p className="section-copy mt-3">Booking, Presse oder Schlagzeuger?</p>
           </div>
           <ContactForm />
         </div>
