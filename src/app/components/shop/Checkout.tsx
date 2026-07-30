@@ -1,30 +1,8 @@
 'use client';
-import { Session } from 'next-auth';
 import Link from 'next/link';
+import { FiArrowRight } from 'react-icons/fi';
+import type { Session } from 'next-auth';
 
-interface CheckoutProps {
-  session: Session | null;
+export default function Checkout({ session: _session }: { session: Session | null }) {
+  return <Link href="/shop/checkout" className="pk-button w-full">Zur Kasse <FiArrowRight aria-hidden /></Link>;
 }
-
-function Checkout({ session }: CheckoutProps) {
-  return (
-    <div className="flex w-full items-center justify-center">
-      {session?.user ? (
-        <Link href={'/shop/checkout'} className="btn btn-primary">
-          Checkout
-        </Link>
-      ) : (
-        <div className="flex flex-col gap-4">
-          {/* <button onClick={() => signIn()} className="btn btn-primary">
-            Sign In
-          </button> */}
-          <Link href={'/shop/checkout/'} className="btn btn-primary">
-            Checkout
-          </Link>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default Checkout;

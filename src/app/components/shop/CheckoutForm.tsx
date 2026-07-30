@@ -1,34 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ShoppingCart } from '../../../../utils/db/cart';
-import CartEntry from './CartEntry';
+import type { ShoppingCart } from '../../../../utils/db/cart';
 import { formatPrice } from '../../../../utils/utils';
 import StripeCheckout from '../stripe/StripeCheckout';
 
-interface CheckoutFormProps {
-  cart: ShoppingCart | null;
-}
+export default function CheckoutForm({ cart }: { cart: ShoppingCart | null }) {
+  const productsTotal = cart?.items.reduce((total, item) => total + item.product.price * item.quantity, 0) ?? 0;
+  const shipping = Math.max(0, (cart?.subtotal ?? 0) - productsTotal);
 
-export default function CheckoutForm({ cart }: CheckoutFormProps) {
-  const [formSuccess, setFormSuccess] = useState(false);
-  const [formSuccessMessage, setFormSuccessMessage] = useState('');
-
-  return (
-    <div className="flex justify-center bg-slate-200/10 w-full sm:w-max rounded-md">
-      {formSuccess ? (
-        <div className="text-success text-3xl">{formSuccessMessage}</div>
-      ) : (
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:justify-center w-full sm:p-2 py-4">
-          <div className="flex flex-col gap-1 w-[90%] sm:w-max  text-[#30313d] border bg-slate-100/80 rounded-md p-2 sm:p-10">
-            {cart?.items.map((item) => <CartEntry cartItem={item} key={item.id} />)}
-            <span className="text-left italic text-info text-lg">Shipping: {formatPrice(500)}</span>
-            <div className="divider"></div>
-            <span className="font-semibold text-left text-3xl">Total: {formatPrice(cart?.subtotal!)}</span>
-          </div>
-          <StripeCheckout cart={cart} />
-        </div>
-      )}
-    </div>
-  );
+  return <div className="grid gap-6 lg:grid-cols-[22rem_26rem] lg:items-start"><aside className="surface-strong p-6"><p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Bestellung</p><div className="mt-5 space-y-4">{cart?.items.map((item) => <div key={item.id} className="flex justify-between gap-4 border-b border-white/10 pb-4 text-sm"><div><p className="font-bold text-white">{item.quantity}× {item.product.name}</p>{item.product.size && <p className="mt-1 text-zinc-500">Grösse {item.product.size}</p>}</div><span className="text-zinc-300">{formatPrice(item.product.price * item.quantity)}</span></div>)}</div><dl className="mt-5 space-y-3 text-sm"><div className="flex justify-between text-zinc-400"><dt>Artikel</dt><dd>{formatPrice(productsTotal)}</dd></div><div className="flex justify-between text-zinc-400"><dt>Versand</dt><dd>{formatPrice(shipping)}</dd></div><div className="flex justify-between border-t border-white/10 pt-4 text-lg font-black"><dt>Total</dt><dd className="text-pk-green">{formatPrice(cart?.subtotal ?? 0)}</dd></div></dl></aside><StripeCheckout cart={cart} /></div>;
 }

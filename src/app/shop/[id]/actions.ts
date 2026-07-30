@@ -27,4 +27,5 @@ export async function incrementProductQuantity(productId: string) {
   }
 
   revalidatePath('/shop/[id]');
+  revalidatePath('/', 'layout');
 }

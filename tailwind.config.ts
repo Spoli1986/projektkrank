@@ -17,6 +17,10 @@ const config: Config = {
       colors: {
         'grey-black': 'rgba(31, 41, 55)',
         'pk-green': '#51de0b',
+        'pk-gold': '#d5a14a',
+      },
+      boxShadow: {
+        glow: '0 0 0 1px rgba(81, 222, 11, 0.24), 0 20px 70px rgba(81, 222, 11, 0.12)',
       },
     },
   },
@@ -24,16 +28,19 @@ const config: Config = {
   daisyui: {
     themes: [
       {
-        lightTheme: {
-          primary: '#f4aa3a',
-          secondary: '#f4f4a1',
-          accent: '#1be885',
-          neutral: '#272136',
-          'base-100': '#ffffff',
-          info: '#778ad4',
-          success: '#23b893',
-          warning: '#f79926',
-          error: '#ea535a',
+        projektkrank: {
+          primary: '#51de0b',
+          secondary: '#d5a14a',
+          accent: '#9cf56f',
+          neutral: '#171c17',
+          'base-100': '#0b0e0b',
+          'base-200': '#111511',
+          'base-300': '#1b211b',
+          'base-content': '#f4f7f2',
+          info: '#83b8ff',
+          success: '#51de0b',
+          warning: '#d5a14a',
+          error: '#ff6b6b',
         },
       },
     ],

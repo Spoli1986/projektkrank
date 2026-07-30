@@ -1,64 +1,25 @@
-import CheckoutForm from '@/app/components/shop/CheckoutForm';
 import Link from 'next/link';
-
+import { FiArrowLeft } from 'react-icons/fi';
+import CheckoutForm from '@/app/components/shop/CheckoutForm';
 import StripeWrapper from '@/app/components/stripe/StripeWrapper';
 import { getCart } from '../../../../utils/db/cart';
 
-async function getClinetSecret(price: number | undefined) {
-  const link = new URL(`${process.env.NEXTAUTH_URL}/api/stripe`);
-
+async function getClientSecret(price: number | undefined) {
+  if (!price || !process.env.NEXTAUTH_URL) return null;
   try {
-    const res = await fetch(link, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ price: price }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch data. Status: ${res.status}`);
-    }
-    const data = await res.json();
-
-    return data.secret.client_secret;
+    const response = await fetch(new URL('/api/stripe', process.env.NEXTAUTH_URL), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ price }), cache: 'no-store' });
+    if (!response.ok) throw new Error(`Stripe request failed with status ${response.status}`);
+    const data = await response.json();
+    return data.secret.client_secret as string;
   } catch (error) {
-    console.error('Error occured: ', error);
+    console.error('Unable to initialize checkout:', error);
+    return null;
   }
 }
 
-async function Checkout() {
+export default async function CheckoutPage() {
   const cart = await getCart();
-  const price = cart?.subtotal;
+  const clientSecret = await getClientSecret(cart?.subtotal);
 
-  const clientSecret = await getClinetSecret(price);
-
-  if (!clientSecret) {
-    return (
-      <div className="flex flex-col text-center mt-52">
-        <h3 className="text-2xl font-bold text-error p-4 w-full self-center">
-          Checkout failed, please try again later...{' '}
-        </h3>
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex flex-col items-center justify-center text-center mt-52">
-        <h3 className="text-2xl font-bold text-warning p-4 w-max self-center">Checkout</h3>
-        <div className="mt-2 px-7 py-3 w-full sm:w-max">
-          <StripeWrapper clientSecret={clientSecret}>
-            <CheckoutForm cart={cart} />
-          </StripeWrapper>
-        </div>
-        <div className="flex justify-center mt-4">
-          {/* Navigates back to the base URL - closing the modal */}
-          <Link href="/shop/cart" className="btn btn-primary">
-            Back
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  return <main className="pb-24 pt-32"><div className="site-shell"><Link href="/shop/cart" className="pk-button-quiet"><FiArrowLeft /> Zurück zum Warenkorb</Link><div className="mb-10 mt-8"><p className="eyebrow">Sicher bezahlen</p><h1 className="section-title mt-3">Checkout</h1></div>{!clientSecret ? <div className="surface border-red-400/20 p-8"><h2 className="text-2xl font-black uppercase text-red-300">Checkout nicht verfügbar</h2><p className="mt-3 text-zinc-400">Bitte versuche es später noch einmal.</p></div> : <StripeWrapper clientSecret={clientSecret}><CheckoutForm cart={cart} /></StripeWrapper>}</div></main>;
 }
-
-export default Checkout;

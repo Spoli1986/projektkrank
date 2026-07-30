@@ -215,7 +215,7 @@ export async function POST(request: NextRequest) {
         Liebe Grüsse
       </p>
       <p>
-        Stefu, Hene, Davill, Peter
+        Stefu, Hene und Davill
       </p>
       <table>
     <thead>

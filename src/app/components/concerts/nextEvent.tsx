@@ -1,12 +1,14 @@
+import { getTodayBoundary } from '../../../../utils/date';
 import { prisma } from '../../../../utils/db/prisma';
 import Previews from './previews';
 
 type Props = {};
 
 async function NextEvent({}: Props) {
+  const today = getTodayBoundary();
   const nextEvent = await prisma.event.findMany({
     where: {
-      past: false,
+      date: { gte: today },
     },
     orderBy: [{ date: 'asc' }],
   });

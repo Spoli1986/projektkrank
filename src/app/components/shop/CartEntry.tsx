@@ -1,62 +1,25 @@
 'use client';
 
 import Image from 'next/image';
-import { CartItemWithProduct } from '../../../../utils/db/cart';
 import Link from 'next/link';
-import { formatPrice } from '../../../../utils/utils';
 import { useTransition } from 'react';
+import { FiTrash2 } from 'react-icons/fi';
+import type { CartItemWithProduct } from '../../../../utils/db/cart';
+import { formatPrice } from '../../../../utils/utils';
 import { setProductQuantity } from '../../shop/cart/actions';
 
-interface CartEntryProps {
-  cartItem: CartItemWithProduct;
-}
-
-function CartEntry({ cartItem: { product, quantity } }: CartEntryProps) {
+export default function CartEntry({ cartItem: { product, quantity } }: { cartItem: CartItemWithProduct }) {
   const [isPending, startTransition] = useTransition();
-  const quantityOptions: JSX.Element[] = [];
 
-  for (let i = 1; i <= 99; i++) {
-    quantityOptions.push(
-      <option value={i} key={i}>
-        {i}
-      </option>,
-    );
+  function updateQuantity(nextQuantity: number) {
+    startTransition(async () => { await setProductQuantity(product.id, nextQuantity); });
   }
+
   return (
-    <div className="w-full">
-      <div className="flex flex-wrap items-center gap-4">
-        <Image src={product.imageUrl[0]} alt={product.name} width={200} height={200} className="rounded-lg" />
-      </div>
-      <div>
-        <Link href={'/shop/' + product.id} className="font-bold">
-          {product.name}
-        </Link>
-        {!!product.size && <div>Size: {product.size}</div>}
-        <div>Price: {formatPrice(product.price)}</div>
-        <div className="my-1 flex items-center gap-2">
-          Quantity:
-          <select
-            className="select select-bordered w-full max-w-[80px]"
-            defaultValue={quantity}
-            onChange={(e) => {
-              const newQuantity = parseInt(e.currentTarget.value);
-              startTransition(async () => {
-                await setProductQuantity(product.id, newQuantity);
-              });
-            }}
-          >
-            <option value={0}>0 (Remove)</option>
-            {quantityOptions}
-          </select>
-        </div>
-        <div className="flex items-center gap-3">
-          Total: {formatPrice(product.price * quantity)}
-          {isPending && <span className="loading loading-spinner loading-sm" />}
-        </div>
-      </div>
-      <div className="divider"></div>
-    </div>
+    <article className={`surface grid gap-5 p-4 transition sm:grid-cols-[8rem_1fr_auto] sm:items-center ${isPending ? 'opacity-60' : ''}`}>
+      <Link href={`/shop/${product.id}`} className="relative aspect-square overflow-hidden rounded-xl bg-zinc-900"><Image src={product.imageUrl[0]} alt={product.name} fill sizes="128px" className="object-cover" /></Link>
+      <div><Link href={`/shop/${product.id}`} className="text-xl font-black uppercase text-white transition hover:text-pk-green">{product.name}</Link>{product.size && <p className="mt-1 text-sm text-zinc-500">Grösse: {product.size}</p>}<p className="mt-4 text-sm text-zinc-400">Einzelpreis: {formatPrice(product.price)}</p><div className="mt-4 flex items-center gap-3"><label htmlFor={`quantity-${product.id}`} className="text-xs font-bold uppercase tracking-[0.12em] text-zinc-500">Menge</label><select id={`quantity-${product.id}`} className="field-control w-24 py-2" value={quantity} onChange={(event) => updateQuantity(Number.parseInt(event.currentTarget.value, 10))}>{Array.from({ length: 20 }, (_, index) => index + 1).map((value) => <option value={value} key={value}>{value}</option>)}</select><button type="button" className="icon-button h-10 w-10" onClick={() => updateQuantity(0)} aria-label={`${product.name} entfernen`}><FiTrash2 aria-hidden /></button>{isPending && <span className="loading loading-spinner loading-sm text-pk-green" />}</div></div>
+      <div className="sm:text-right"><p className="text-xs font-bold uppercase tracking-[0.12em] text-zinc-500">Total</p><p className="mt-1 text-xl font-black text-pk-green">{formatPrice(product.price * quantity)}</p></div>
+    </article>
   );
 }
-
-export default CartEntry;

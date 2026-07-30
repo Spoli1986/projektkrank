@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const allowedPaths = ['/', '/contact'];
+  const allowedPaths = ['/', '/contact', '/shop'];
 
   const isAllowed = allowedPaths.some((path) => pathname === path || pathname.startsWith(path + '/'));
 

@@ -2,12 +2,11 @@
 
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { ShoppingCart } from '../../../../utils/db/cart';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import '@stripe/stripe-js'; // Import this to ensure the CSS is included
 import { formatPrice, generateRandomHexString } from '../../../../utils/utils';
 import { StripeAddressElementChangeEvent } from '@stripe/stripe-js';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { env } from '../../../../utils/env';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface CheckoutFormProps {
   cart: ShoppingCart | null;
@@ -27,7 +26,6 @@ export type FormData = {
 
 export default function StripeCheckout({ cart }: CheckoutFormProps) {
   const [email, setEmail] = useState<string>('');
-  const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const elements = useElements();
   const stripe = useStripe();
@@ -71,19 +69,20 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
     }));
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const formURL = e.target.action;
+    const formURL = e.currentTarget.action;
 
     if (!stripe || !elements) {
+      setLoading(false);
       return;
     }
 
     const { error: confirmError } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/shop/checkout/success,`,
+        return_url: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/shop/checkout/success`,
         payment_method_data: {
           billing_details: {
             email: email,
@@ -125,20 +124,22 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-2 flex flex-col justify-center sm:w-[340px] w-[90%] border bg-slate-100/80 rounded-md p-2 sm:p-10"
+      className="surface flex w-full flex-col gap-4 p-5 text-[#30313d] sm:p-7"
       action="/api/email"
     >
-      <PaymentElement className="text-red" />
+      <p className="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Zahlung & Versand</p>
+      <PaymentElement />
       <div className="flex flex-col">
-        <label htmlFor="" className=" text-[#30313d] text-left font-light">
+        <label htmlFor="checkout-email" className="mb-2 text-left text-xs font-bold uppercase tracking-[0.12em] text-zinc-600">
           Email
         </label>
         <input
+          id="checkout-email"
           type="email"
           name="email"
           placeholder="Email"
           autoComplete="off"
-          className="w-full border rounded-md p-3 outline-[#5caafe] font-light placeholder-[#6d6e78] m-0"
+          className="w-full rounded-xl border border-zinc-300 bg-white p-3 font-normal text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-pk-green focus:ring-4 focus:ring-pk-green/10"
           onChange={(e) => setEmail(e.target.value)}
           required
         />
@@ -152,8 +153,8 @@ export default function StripeCheckout({ cart }: CheckoutFormProps) {
           handleInput(e);
         }}
       />
-      <button type="submit" className="btn btn-primary">
-        {loading ? <span className="loading loading-spinner" /> : <span>PAY</span>}
+      <button type="submit" disabled={loading} className="pk-button mt-2 w-full">
+        {loading ? <span className="loading loading-spinner loading-sm" /> : <span>Jetzt bezahlen</span>}
       </button>
     </form>
   );

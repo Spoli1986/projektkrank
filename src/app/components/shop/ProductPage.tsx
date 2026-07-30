@@ -1,71 +1,24 @@
-import React from 'react';
+import Link from 'next/link';
+import { FiPackage, FiTruck } from 'react-icons/fi';
 import ImageCarousel from './ImageCarousel';
 import PriceTag from './PriceTag';
-import AddToCartButton from '@/app/components/shop/AddToCartButton';
-import Link from 'next/link';
+import AddToCartButton from './AddToCartButton';
 import { incrementProductQuantity } from '@/app/shop/[id]/actions';
 
-type Props = {
-  products: {
-    product: {
-      imageUrl: string[];
-      price: number;
-      id: string;
-      name: string;
-      description: string;
-      createdAt: Date;
-      updatedAt: Date;
-      size: string | null;
-    };
-    productSize:
-      | ''
-      | {
-          imageUrl: string[];
-          price: number;
-          id: string;
-          name: string;
-          description: string;
-          createdAt: Date;
-          updatedAt: Date;
-          size: string | null;
-        }[]
-      | null
-      | undefined;
-  };
-};
+type Product = { imageUrl: string[]; price: number; id: string; name: string; description: string; createdAt: Date; updatedAt: Date; size: string | null };
+type Props = { products: { product: Product; productSize: '' | Product[] | null | undefined } };
 
-function SingleProductPage({ products }: Props) {
+export default function SingleProductPage({ products }: Props) {
+  const { product, productSize } = products;
   return (
-    <div className="flex flex-col lg:flex-row mt-32 self-center gap-4 lg:items-center">
-      <ImageCarousel imageUrl={products.product.imageUrl} />
-      <div className="flex flex-col text-white gap-4">
-        <h1 className="text-5xl font-bold">{products.product.name}</h1>
-        <PriceTag price={products.product.price} />
-        <p className="py-6">{products.product.description}</p>
-        {products.productSize && (
-          <div className="flex gap-1 items-center">
-            Grösse:
-            <div className="dropdown dropdown-bottom text-black">
-              <div tabIndex={0} role="button" className="btn">
-                {products.product.size}
-              </div>
-              <ul tabIndex={0} className="dropdown-content z-[1] menu shadow bg-base-100 rounded-box">
-                {products.productSize.map(
-                  (product) =>
-                    product.size !== products.product.size && (
-                      <li key={product.id}>
-                        <Link href={'/shop/' + product.id}>{product.size}</Link>
-                      </li>
-                    ),
-                )}
-              </ul>
-            </div>
-          </div>
-        )}
-        <AddToCartButton productId={products.product.id} incrementProductQuantity={incrementProductQuantity} />
+    <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-start">
+      <ImageCarousel imageUrl={product.imageUrl} />
+      <div className="lg:sticky lg:top-28">
+        <p className="eyebrow">Official merch</p><h1 className="mt-4 text-4xl font-black uppercase tracking-tight sm:text-6xl">{product.name}</h1><PriceTag price={product.price} className="mt-6 text-base" /><p className="mt-7 text-lg leading-8 text-zinc-300">{product.description}</p>
+        {productSize && productSize.length > 0 && <div className="mt-8"><p className="text-xs font-bold uppercase tracking-[0.16em] text-zinc-500">Grösse</p><div className="mt-3 flex flex-wrap gap-2">{productSize.map((option) => <Link key={option.id} href={`/shop/${option.id}`} className={`flex min-h-[2.75rem] min-w-12 items-center justify-center rounded-full border px-4 text-sm font-black uppercase transition ${option.id === product.id ? 'border-pk-green bg-pk-green text-black' : 'border-white/[0.15] bg-white/5 text-white hover:border-pk-green/50'}`}>{option.size}</Link>)}</div></div>}
+        <div className="mt-8"><AddToCartButton productId={product.id} incrementProductQuantity={incrementProductQuantity} /></div>
+        <div className="mt-10 grid gap-3 border-t border-white/10 pt-6 text-sm text-zinc-400 sm:grid-cols-2"><span className="flex items-center gap-2"><FiPackage className="text-pk-green" /> Direkt von der Band</span><span className="flex items-center gap-2"><FiTruck className="text-pk-green" /> Versand innerhalb Schweiz</span></div>
       </div>
     </div>
   );
 }
-
-export default SingleProductPage;
