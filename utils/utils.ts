@@ -28,15 +28,12 @@ export function generateRandomHexString(length: number): string {
 
 export function getMapLink(location: string): string {
   if (typeof window !== 'undefined' && window.navigator) {
-    console.log(window);
     const isIOS = /iPad|iPhone|iPod|Safari/.test(window.navigator.userAgent);
 
     const isAndroid = /Android|Chrome/.test(window.navigator.userAgent);
     if (isAndroid && isIOS) {
-      console.log('chrome');
       return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
     } else if (isIOS) {
-      console.log('ios');
       return `https://maps.apple.com/?q=${encodeURIComponent(location)}`;
     }
   }
