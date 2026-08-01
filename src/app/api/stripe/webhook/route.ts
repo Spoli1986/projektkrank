@@ -1,36 +1,39 @@
-import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
 
-const stripe = require('stripe')(process.env.STRIPE_PRIVATE);
-
-const secret = process.env.STRIPE_WEBHOOK_TEST || '';
-
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const body = await req.text();
+    const stripeSecretKey = process.env.STRIPE_SECRET;
+    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET ?? process.env.STRIPE_WEBHOOK_TEST;
 
-    const signature = headers().get('stripe-signature');
-    const header = headers().get('stripe-signature');
-    // const event = stripe.webhooks.constructEvent(body, signature, secret);
+    if (!stripeSecretKey || !webhookSecret) {
+      console.error('Stripe webhook configuration is missing.', {
+        hasStripeSecret: Boolean(stripeSecretKey),
+        hasWebhookSecret: Boolean(webhookSecret),
+      });
 
-    // if (event.type === 'checkout.session.completed') {
-    //   if (!event.data.object.customer_details.email) {
-    //     throw new Error(`missing user email, ${event.id}`);
-    //   }
-    //   if (!event.data.object.metadata.itinerary_id) {
-    //     throw new Error(`missing itinerary_id on metadata, ${event.id}`);
-    //   }
-    // }
+      return NextResponse.json({ message: 'Stripe webhook is not configured.', ok: false }, { status: 500 });
+    }
 
-    return NextResponse.json({ ok: true });
+    const body = await request.text();
+    const headerStore = await headers();
+    const signature = headerStore.get('stripe-signature');
+
+    if (!signature) {
+      return NextResponse.json({ message: 'Missing Stripe signature.', ok: false }, { status: 400 });
+    }
+
+    const stripe = new Stripe(stripeSecretKey);
+    const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+
+    // Add event-specific processing here when order fulfilment is implemented.
+    // Example: if (event.type === 'payment_intent.succeeded') { ... }
+
+    return NextResponse.json({ eventType: event.type, ok: true });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      {
-        message: 'something went wrong',
-        ok: false,
-      },
-      { status: 500 },
-    );
+    console.error('Stripe webhook verification failed:', error);
+
+    return NextResponse.json({ message: 'Invalid Stripe webhook signature.', ok: false }, { status: 400 });
   }
 }
