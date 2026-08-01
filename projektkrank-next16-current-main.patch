@@ -1,0 +1,443 @@
+diff --git a/.eslintrc.json b/.eslintrc.json
+deleted file mode 100644
+index 4d765f2817874674ea266e8c29bbadd275a21fb5..0000000000000000000000000000000000000000
+--- a/.eslintrc.json
++++ /dev/null
+@@ -1,3 +0,0 @@
+-{
+-  "extends": ["next/core-web-vitals", "prettier"]
+-}
+diff --git a/eslint.config.mjs b/eslint.config.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..7229e9d5fda7ac1e3088415b88dc9e5f1251e7f0
+--- /dev/null
++++ b/eslint.config.mjs
+@@ -0,0 +1,11 @@
++import { defineConfig, globalIgnores } from 'eslint/config';
++import nextVitals from 'eslint-config-next/core-web-vitals';
++import nextTypeScript from 'eslint-config-next/typescript';
++import prettier from 'eslint-config-prettier/flat';
++
++export default defineConfig([
++  ...nextVitals,
++  ...nextTypeScript,
++  prettier,
++  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
++]);
+diff --git a/next.config.js b/next.config.js
+index cdb520818717e501af86524993b506d277233684..879976b85340eb998eb5b491d88fd05e005e2e53 100644
+--- a/next.config.js
++++ b/next.config.js
+@@ -16,9 +16,6 @@ const nextConfig = {
+       { hostname: 'i.postimg.cc' },
+     ],
+   },
+-  experimental: {
+-    serverActions: true,
+-  },
+ };
+ 
+ module.exports = nextConfig;
+diff --git a/package.json b/package.json
+index b5460ddd5e93fbcd7cf7926bb36ac2327a8614fa..f41d8f54a43fed1a13502d4de1b3d6129f9df161 100644
+--- a/package.json
++++ b/package.json
+@@ -6,7 +6,7 @@
+     "dev": "next dev",
+     "build": "next build",
+     "start": "next start",
+-    "lint": "next lint",
++    "lint": "eslint .",
+     "postinstall": "prisma generate"
+   },
+   "dependencies": {
+@@ -23,16 +23,16 @@
+     "daisyui": "^4.6.0",
+     "dayjs": "^1.11.10",
+     "eslint-config-prettier": "^9.1.0",
+-    "next": "14.0.1",
+-    "next-auth": "^4.24.5",
++    "next": "16.2.12",
++    "next-auth": "^4.24.15",
+     "nodemailer": "^6.9.10",
+     "pdf-lib": "^1.17.1",
+     "pdf-lib-draw-table-beta": "^0.1.22",
+     "prettier": "^3.2.4",
+     "prettier-plugin-tailwindcss": "^0.5.11",
+     "prisma": "^5.8.1",
+-    "react": "^18",
+-    "react-dom": "^18",
++    "react": "19.2.8",
++    "react-dom": "19.2.8",
+     "react-icons": "^4.12.0",
+     "react-youtube": "^10.1.0",
+     "stripe": "^15.3.0",
+@@ -40,14 +40,17 @@
+     "zod": "^3.22.4"
+   },
+   "devDependencies": {
+-    "@types/node": "18.17.0",
+-    "@types/react": "^18",
+-    "@types/react-dom": "^18",
++    "@types/node": "^20.19.21",
++    "@types/react": "^19.2.17",
++    "@types/react-dom": "^19.2.3",
+     "autoprefixer": "^10.0.1",
+-    "eslint": "^8",
+-    "eslint-config-next": "14.0.1",
++    "eslint": "^9.0.0",
++    "eslint-config-next": "16.2.12",
+     "postcss": "^8",
+     "tailwindcss": "^3.3.0",
+     "typescript": "^5"
++  },
++  "engines": {
++    "node": ">=20.9.0"
+   }
+ }
+diff --git a/src/app/api/stripe/webhook/route.ts b/src/app/api/stripe/webhook/route.ts
+index 90df164a52af2257b23838769a2e07e1afda5743..bccafcc6bb65e16e3d9c2bceef6f3c817f06a9b7 100644
+--- a/src/app/api/stripe/webhook/route.ts
++++ b/src/app/api/stripe/webhook/route.ts
+@@ -1,36 +1,39 @@
+-import { NextResponse } from 'next/server';
+ import { headers } from 'next/headers';
++import { NextResponse } from 'next/server';
++import Stripe from 'stripe';
+ 
+-const stripe = require('stripe')(process.env.STRIPE_PRIVATE);
++export async function POST(request: Request) {
++  try {
++    const stripeSecretKey = process.env.STRIPE_SECRET;
++    const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET ?? process.env.STRIPE_WEBHOOK_TEST;
+ 
+-const secret = process.env.STRIPE_WEBHOOK_TEST || '';
++    if (!stripeSecretKey || !webhookSecret) {
++      console.error('Stripe webhook configuration is missing.', {
++        hasStripeSecret: Boolean(stripeSecretKey),
++        hasWebhookSecret: Boolean(webhookSecret),
++      });
+ 
+-export async function POST(req: Request) {
+-  try {
+-    const body = await req.text();
+-
+-    const signature = headers().get('stripe-signature');
+-    const header = headers().get('stripe-signature');
+-    // const event = stripe.webhooks.constructEvent(body, signature, secret);
+-
+-    // if (event.type === 'checkout.session.completed') {
+-    //   if (!event.data.object.customer_details.email) {
+-    //     throw new Error(`missing user email, ${event.id}`);
+-    //   }
+-    //   if (!event.data.object.metadata.itinerary_id) {
+-    //     throw new Error(`missing itinerary_id on metadata, ${event.id}`);
+-    //   }
+-    // }
+-
+-    return NextResponse.json({ ok: true });
++      return NextResponse.json({ message: 'Stripe webhook is not configured.', ok: false }, { status: 500 });
++    }
++
++    const body = await request.text();
++    const headerStore = await headers();
++    const signature = headerStore.get('stripe-signature');
++
++    if (!signature) {
++      return NextResponse.json({ message: 'Missing Stripe signature.', ok: false }, { status: 400 });
++    }
++
++    const stripe = new Stripe(stripeSecretKey);
++    const event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
++
++    // Add event-specific processing here when order fulfilment is implemented.
++    // Example: if (event.type === 'payment_intent.succeeded') { ... }
++
++    return NextResponse.json({ eventType: event.type, ok: true });
+   } catch (error) {
+-    console.error(error);
+-    return NextResponse.json(
+-      {
+-        message: 'something went wrong',
+-        ok: false,
+-      },
+-      { status: 500 },
+-    );
++    console.error('Stripe webhook verification failed:', error);
++
++    return NextResponse.json({ message: 'Invalid Stripe webhook signature.', ok: false }, { status: 400 });
+   }
+ }
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 1f01afde60ee5bb30d4ea971247ca19292982cb7..5072b358e5be61beb6a092e1670e8e1b32a9cdd5 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -16,7 +16,7 @@ export const metadata: Metadata = {
+ 
+ export default function RootLayout({ children }: { children: React.ReactNode }) {
+   return (
+-    <html lang="de" data-theme="projektkrank">
++    <html lang="de" data-theme="projektkrank" data-scroll-behavior="smooth">
+       <body className="flex min-h-screen flex-col overflow-x-hidden">
+         <SessionProvider>
+           <Navbar />
+diff --git a/src/app/shop/[id]/page.tsx b/src/app/shop/[id]/page.tsx
+index 3f54a1eede642b18d241522fbb44005991f16cc0..37f7f51177a27b41298f2a8589781df6f5cb32e0 100644
+--- a/src/app/shop/[id]/page.tsx
++++ b/src/app/shop/[id]/page.tsx
+@@ -1,11 +1,50 @@
+-import { notFound } from 'next/navigation';
+-import { prisma } from '../../../../utils/db/prisma';
+-import { Metadata } from 'next';
+-import { cache } from 'react';
+ import ProductPageWrapper from '@/app/components/shop/ProductPageWrapper';
+ import SingleProductPage from '@/app/components/shop/ProductPage';
++import { Metadata } from 'next';
++import { notFound } from 'next/navigation';
++import { cache } from 'react';
++import { prisma } from '../../../../utils/db/prisma';
++
++interface ProductPageProps {
++  params: Promise<{ id: string }>;
++}
++
++const getProduct = cache(async (id: string) => {
++  const product = await prisma.product.findUnique({ where: { id } });
++
++  if (!product) {
++    notFound();
++  }
++
++  const productSize = product.size
++    ? await prisma.product.findMany({
++        where: { description: { equals: product.description } },
++        orderBy: { size: 'asc' },
++      })
++    : null;
++
++  return { product, productSize };
++});
++
++export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
++  const { id } = await params;
++  const products = await getProduct(id);
++
++  return {
++    title: products.product.name,
++    description: products.product.description,
++  };
++}
++
++export default async function ProductPage({ params }: ProductPageProps) {
++  const { id } = await params;
++  const products = await getProduct(id);
+ 
+-interface ProductPageProps { params: { id: string } }
+-const getProduct = cache(async (id: string) => { const product = await prisma.product.findUnique({ where: { id } }); if (!product) notFound(); const productSize = product.size ? await prisma.product.findMany({ where: { description: { equals: product.description } }, orderBy: { size: 'asc' } }) : null; return { product, productSize }; });
+-export async function generateMetadata({ params: { id } }: ProductPageProps): Promise<Metadata> { const products = await getProduct(id); return { title: products.product.name, description: products.product.description }; }
+-export default async function ProductPage({ params: { id } }: ProductPageProps) { const products = await getProduct(id); return <main><ProductPageWrapper><SingleProductPage products={products} /></ProductPageWrapper></main>; }
++  return (
++    <main>
++      <ProductPageWrapper>
++        <SingleProductPage products={products} />
++      </ProductPageWrapper>
++    </main>
++  );
++}
+diff --git a/src/app/shop/checkout/error/page.tsx b/src/app/shop/checkout/error/page.tsx
+index 8ed39bef7da84b6f9d7a2c3771aa52e5cab03bf9..112d10aff37acdca01691f7cc1bbe1c53b4f9241 100644
+--- a/src/app/shop/checkout/error/page.tsx
++++ b/src/app/shop/checkout/error/page.tsx
+@@ -1,6 +1,35 @@
+ import Link from 'next/link';
+ import { FiAlertTriangle } from 'react-icons/fi';
+ 
+-export default function ErrorPayment({ searchParams }: { searchParams?: { message?: string } }) {
+-  return <main className="flex min-h-[75vh] items-center pb-20 pt-32"><div className="site-shell"><div className="surface mx-auto max-w-2xl border-red-400/20 p-8 text-center sm:p-12"><FiAlertTriangle className="mx-auto h-14 w-14 text-red-400" /><p className="eyebrow mt-6 text-red-300">Zahlung fehlgeschlagen</p><h1 className="mt-3 text-3xl font-black uppercase sm:text-4xl">Das hat leider nicht funktioniert.</h1><p className="mt-5 leading-7 text-zinc-400">{searchParams?.message || 'Unser Shop konnte die Zahlung nicht abschliessen. Bitte versuche es später noch einmal.'}</p><div className="mt-8 flex flex-wrap justify-center gap-3"><Link href="/shop/checkout" className="pk-button">Erneut versuchen</Link><Link href="/shop/cart" className="pk-button-secondary">Zum Warenkorb</Link></div></div></div></main>;
++interface ErrorPaymentProps {
++  searchParams: Promise<{ message?: string | string[] }>;
++}
++
++export default async function ErrorPayment({ searchParams }: ErrorPaymentProps) {
++  const { message } = await searchParams;
++  const errorMessage = Array.isArray(message) ? message[0] : message;
++
++  return (
++    <main className="flex min-h-[75vh] items-center pb-20 pt-32">
++      <div className="site-shell">
++        <div className="surface mx-auto max-w-2xl border-red-400/20 p-8 text-center sm:p-12">
++          <FiAlertTriangle className="mx-auto h-14 w-14 text-red-400" />
++          <p className="eyebrow mt-6 text-red-300">Zahlung fehlgeschlagen</p>
++          <h1 className="mt-3 text-3xl font-black uppercase sm:text-4xl">Das hat leider nicht funktioniert.</h1>
++          <p className="mt-5 leading-7 text-zinc-400">
++            {errorMessage ||
++              'Unser Shop konnte die Zahlung nicht abschliessen. Bitte versuche es später noch einmal.'}
++          </p>
++          <div className="mt-8 flex flex-wrap justify-center gap-3">
++            <Link href="/shop/checkout" className="pk-button">
++              Erneut versuchen
++            </Link>
++            <Link href="/shop/cart" className="pk-button-secondary">
++              Zum Warenkorb
++            </Link>
++          </div>
++        </div>
++      </div>
++    </main>
++  );
+ }
+diff --git a/src/app/shop/page.tsx b/src/app/shop/page.tsx
+index 890671a7fb418c74206bf19f2fe29cfa4f598e3c..6fa322808682dd51663cbeb8b3b07eb14947ab2d 100644
+--- a/src/app/shop/page.tsx
++++ b/src/app/shop/page.tsx
+@@ -8,13 +8,15 @@ import PaginationBar from '../components/shop/PaginationBar';
+ import PriceTag from '../components/shop/PriceTag';
+ 
+ interface ShopProps {
+-  searchParams: { page?: string };
++  searchParams: Promise<{ page?: string | string[] }>;
+ }
+ 
+ export const metadata: Metadata = { title: 'Shop', description: 'Projekt Krank Merch, Shirts und Musik.' };
+ 
+ export default async function Shop({ searchParams }: ShopProps) {
+-  const parsedPage = Number.parseInt(searchParams.page ?? '1', 10);
++  const { page } = await searchParams;
++  const pageValue = Array.isArray(page) ? page[0] : page;
++  const parsedPage = Number.parseInt(pageValue ?? '1', 10);
+   const currentPage = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
+   const pageSize = 8;
+   const totalItemCount = await prisma.product.count();
+diff --git a/src/middleware.ts b/src/proxy.ts
+similarity index 93%
+rename from src/middleware.ts
+rename to src/proxy.ts
+index 7c6440eae85988e93c73e73ab9d40230317a8c4c..bde5834b080d82d66eb89490547ed1bd556521f1 100644
+--- a/src/middleware.ts
++++ b/src/proxy.ts
+@@ -1,7 +1,7 @@
+ import { NextResponse } from 'next/server';
+ import type { NextRequest } from 'next/server';
+ 
+-export function middleware(request: NextRequest) {
++export function proxy(request: NextRequest) {
+   const { pathname } = request.nextUrl;
+   const allowedPaths = ['/', '/contact', '/shop'];
+ 
+diff --git a/utils/db/cart.ts b/utils/db/cart.ts
+index 5df4d4e2d8fa4793c12fe6b46adc19641d654b30..2c5ca4e619bafb35d09882a763d3a4bc145d10ce 100644
+--- a/utils/db/cart.ts
++++ b/utils/db/cart.ts
+@@ -1,9 +1,8 @@
+ import { Cart, CartItem, Prisma } from '@prisma/client';
+-import { prisma } from './prisma';
+-import { cookies } from 'next/dist/client/components/headers';
++import { cookies } from 'next/headers';
+ import { getServerSession } from 'next-auth';
+ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+-import { env } from '../env';
++import { prisma } from './prisma';
+ 
+ export type CartWithProducts = Prisma.CartGetPayload<{ include: { items: { include: { product: true } } } }>;
+ 
+@@ -28,9 +27,14 @@ export async function getCart(): Promise<ShoppingCart | null> {
+       include: { items: { include: { product: true } } },
+     });
+   } else {
+-    const localCartId = cookies().get('localCartId')?.value;
++    const cookieStore = await cookies();
++    const localCartId = cookieStore.get('localCartId')?.value;
++
+     cart = localCartId
+-      ? await prisma.cart.findUnique({ where: { id: localCartId }, include: { items: { include: { product: true } } } })
++      ? await prisma.cart.findUnique({
++          where: { id: localCartId },
++          include: { items: { include: { product: true } } },
++        })
+       : null;
+   }
+ 
+@@ -48,6 +52,7 @@ export async function getCart(): Promise<ShoppingCart | null> {
+ export async function createCart(): Promise<ShoppingCart> {
+   const session = await getServerSession(authOptions);
+   let newCart: Cart;
++
+   if (session) {
+     newCart = await prisma.cart.create({
+       data: { userId: session.user.id },
+@@ -57,7 +62,8 @@ export async function createCart(): Promise<ShoppingCart> {
+       data: {},
+     });
+ 
+-    cookies().set('localCartId', newCart.id);
++    const cookieStore = await cookies();
++    cookieStore.set('localCartId', newCart.id);
+   }
+ 
+   return {
+@@ -70,11 +76,14 @@ export async function createCart(): Promise<ShoppingCart> {
+ 
+ export async function deleteAnonymousCart(cartId: string) {
+   await prisma.cart.delete({ where: { id: cartId } });
+-  cookies().set('localCartId', '');
++
++  const cookieStore = await cookies();
++  cookieStore.delete('localCartId');
+ }
+ 
+ export async function mergeAnonymousCatIntoUserCart(userId: string) {
+-  const localCartId = cookies().get('localCartId')?.value;
++  const cookieStore = await cookies();
++  const localCartId = cookieStore.get('localCartId')?.value;
+   const localCart = localCartId
+     ? await prisma.cart.findUnique({ where: { id: localCartId }, include: { items: true } })
+     : null;
+@@ -88,18 +97,20 @@ export async function mergeAnonymousCatIntoUserCart(userId: string) {
+ 
+   await prisma.$transaction(async (tx) => {
+     if (userCart) {
+-      const meregedCartItems = mergeCartItems(localCart.items, userCart.items);
++      const mergedCartItems = mergeCartItems(localCart.items, userCart.items);
++
+       await tx.cartItem.deleteMany({
+         where: {
+           cartId: userCart.id,
+         },
+       });
++
+       await tx.cart.update({
+         where: { id: userCart.id },
+         data: {
+           items: {
+             createMany: {
+-              data: meregedCartItems.map((item) => ({
++              data: mergedCartItems.map((item) => ({
+                 productId: item.productId,
+                 quantity: item.quantity,
+               })),
+@@ -126,21 +137,23 @@ export async function mergeAnonymousCatIntoUserCart(userId: string) {
+     await tx.cart.delete({
+       where: { id: localCart.id },
+     });
+-
+-    cookies().set('localCartId', '');
+   });
++
++  cookieStore.delete('localCartId');
+ }
+ 
+ function mergeCartItems(...cartItems: CartItem[][]) {
+   return cartItems.reduce((acc, items) => {
+     items.forEach((item) => {
+       const existingItem = acc.find((i) => i.productId === item.productId);
++
+       if (existingItem) {
+         existingItem.quantity += item.quantity;
+       } else {
+         acc.push(item);
+       }
+     });
++
+     return acc;
+   }, [] as CartItem[]);
+ }

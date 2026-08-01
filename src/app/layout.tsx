@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" data-theme="projektkrank">
+    <html lang="de" data-theme="projektkrank" data-scroll-behavior="smooth">
       <body className="flex min-h-screen flex-col overflow-x-hidden">
         <SessionProvider>
           <Navbar />

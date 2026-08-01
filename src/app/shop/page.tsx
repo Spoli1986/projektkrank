@@ -8,13 +8,15 @@ import PaginationBar from '../components/shop/PaginationBar';
 import PriceTag from '../components/shop/PriceTag';
 
 interface ShopProps {
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string | string[] }>;
 }
 
 export const metadata: Metadata = { title: 'Shop', description: 'Projekt Krank Merch, Shirts und Musik.' };
 
 export default async function Shop({ searchParams }: ShopProps) {
-  const parsedPage = Number.parseInt(searchParams.page ?? '1', 10);
+  const { page } = await searchParams;
+  const pageValue = Array.isArray(page) ? page[0] : page;
+  const parsedPage = Number.parseInt(pageValue ?? '1', 10);
   const currentPage = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1;
   const pageSize = 8;
   const totalItemCount = await prisma.product.count();

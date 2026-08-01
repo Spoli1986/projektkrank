@@ -16,9 +16,6 @@ const nextConfig = {
       { hostname: 'i.postimg.cc' },
     ],
   },
-  experimental: {
-    serverActions: true,
-  },
 };
 
 module.exports = nextConfig;
